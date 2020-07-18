@@ -3,10 +3,10 @@ export default {
     {
       name: 'sanity-tutorials',
       options: {
-        templateRepoId: 'sanity-io/sanity-template-gatsby-portfolio'
-      }
+        templateRepoId: 'sanity-io/sanity-template-gatsby-portfolio',
+      },
     },
-    {name: 'structure-menu'},
+    { name: 'structure-menu' },
     {
       name: 'project-info',
       options: {
@@ -21,37 +21,37 @@ export default {
                   buildHookId: '',
                   title: 'Sanity Studio',
                   name: '',
-                  apiId: ''
+                  apiId: '',
                 },
                 {
                   buildHookId: '',
                   title: 'Portfolio Website',
                   name: '',
-                  apiId: ''
-                }
-              ]
-            }
-          }
+                  apiId: '',
+                },
+              ],
+            },
+          },
         ],
         data: [
           {
             title: 'GitHub repo',
             value: 'https://github.com/elmaanum/sanity-gatsby-wa-portfolio',
-            category: 'Code'
+            category: 'Code',
           },
           {
             title: 'Frontend',
             value: '',
-            category: 'apps'
-          }
-        ]
-      }
+            category: 'apps',
+          },
+        ],
+      },
     },
-    {name: 'project-users', layout: {height: 'auto'}},
+    { name: 'project-users', layout: { height: 'auto' } },
     {
       name: 'document-list',
-      options: {title: 'Recent projects', order: '_createdAt desc', types: ['sampleProject']},
-      layout: {width: 'medium'}
-    }
-  ]
-}
+      options: { title: 'Recent projects', order: '_createdAt desc', types: ['sampleProject'] },
+      layout: { width: 'medium' },
+    },
+  ],
+};
