@@ -1,15 +1,15 @@
-import React from "react";
-import { graphql } from "gatsby";
+import React from 'react';
+import { graphql } from 'gatsby';
 import {
   mapEdgesToNodes,
   filterOutDocsWithoutSlugs,
   filterOutDocsPublishedInTheFuture,
-} from "../lib/helpers";
-import Container from "../components/container";
-import GraphQLErrorList from "../components/graphql-error-list";
-import ProjectPreviewGrid from "../components/project-preview-grid";
-import SEO from "../components/seo";
-import Layout from "../containers/layout";
+} from '../lib/helpers';
+import Container from '../components/container';
+import GraphQLErrorList from '../components/graphql-error-list';
+import ProjectPreviewGrid from '../components/project-preview-grid';
+import SEO from '../components/seo';
+import Layout from '../containers/layout';
 
 export const query = graphql`
   query IndexPageQuery {
@@ -61,7 +61,7 @@ export const query = graphql`
 `;
 const IndexPage = (props) => {
   const { data, errors } = props;
-  console.log(props, "props");
+  console.log(props, 'props');
 
   if (errors) {
     return (
@@ -80,7 +80,7 @@ const IndexPage = (props) => {
 
   if (!site) {
     throw new Error(
-      'Missing "Site settings". Open the studio at http://localhost:3333 and add some content to "Site settings" and restart the development server.'
+      'Missing "Site settings". Open the studio at http://localhost:3333 and add some content to "Site settings" and restart the development server.',
     );
   }
 

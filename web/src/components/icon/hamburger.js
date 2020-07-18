@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const strokeStyle = { vectorEffect: "non-scaling-stroke" };
+const strokeStyle = { vectorEffect: 'non-scaling-stroke' };
 
 const HamburgerIcon = () => (
   <svg

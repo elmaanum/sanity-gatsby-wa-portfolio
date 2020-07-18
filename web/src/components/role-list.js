@@ -1,9 +1,9 @@
-import React from "react";
-import { buildImageObj } from "../lib/helpers";
-import { imageUrlFor } from "../lib/image-url";
-import { ucfirst } from "../lib/string-utils";
+import React from 'react';
+import { buildImageObj } from '../lib/helpers';
+import { imageUrlFor } from '../lib/image-url';
+import { ucfirst } from '../lib/string-utils';
 
-import styles from "./role-list.module.css";
+import styles from './role-list.module.css';
 
 function RoleList({ items, title }) {
   return (
@@ -19,7 +19,7 @@ function RoleList({ items, title }) {
                     src={imageUrlFor(buildImageObj(item.person.image))
                       .width(100)
                       .height(100)
-                      .fit("crop")
+                      .fit('crop')
                       .url()}
                     alt=""
                   />
