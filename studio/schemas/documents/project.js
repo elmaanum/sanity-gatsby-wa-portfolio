@@ -19,9 +19,10 @@ export default {
       },
     },
     {
-      name: 'mainImage',
-      title: 'Main image',
-      type: 'figure',
+      name: 'images',
+      title: 'Images',
+      type: 'array',
+      of: [{ type: 'figure' }],
     },
     {
       name: 'serviceTypes',
@@ -50,7 +51,6 @@ export default {
     select: {
       title: 'title',
       slug: 'slug',
-      media: 'mainImage',
     },
     // prepare({ title = 'No title', publishedAt, slug = {}, media }) {
     //   const path = `/${dateSegment}/${slug.current}/`;

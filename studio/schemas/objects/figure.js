@@ -38,6 +38,7 @@ export default {
     select: {
       imageUrl: 'asset.url',
       title: 'caption',
+      subtitle: 'priority',
     },
   },
 };
