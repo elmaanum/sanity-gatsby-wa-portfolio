@@ -1,13 +1,3 @@
-/**
- * This is the schema definition for the rich text fields used for
- * for this blog studio. When you import it in schemas.js it can be
- * reused in other parts of the studio with:
- *  {
- *    name: 'someName',
- *    title: 'Some title',
- *    type: 'simplePortableText'
- *  }
- */
 export default {
   title: 'Portable Text',
   name: 'simplePortableText',
@@ -26,11 +16,7 @@ export default {
       marks: {
         // Decorators usually describe a single property – e.g. a typographic
         // preference or highlighting by editors.
-        decorators: [
-          { title: 'Strong', value: 'strong' },
-          { title: 'Emphasis', value: 'em' },
-          { title: 'Code', value: 'code' },
-        ],
+        decorators: [{ title: 'Strong', value: 'strong' }, { title: 'Emphasis', value: 'em' }],
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [],
       },

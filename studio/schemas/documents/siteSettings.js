@@ -15,12 +15,6 @@ export default {
       title: 'Title',
     },
     {
-      name: 'subtitle',
-      type: 'string',
-      title: 'SubTitle',
-      description: 'My first sub',
-    },
-    {
       name: 'description',
       type: 'text',
       title: 'Description',
@@ -35,13 +29,6 @@ export default {
       options: {
         layout: 'tags',
       },
-    },
-    {
-      name: 'author',
-      type: 'reference',
-      description: 'Publish an author and set a reference to them here.',
-      title: 'Author',
-      to: [{ type: 'person' }],
     },
   ],
 };

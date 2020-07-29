@@ -27,9 +27,15 @@ export default {
       type: 'figure',
     },
     {
+      name: 'credentials',
+      title: 'Credentials',
+      description: 'Short list of certificates, etc... (e.g. "A.I.A., LEED AP")',
+      type: 'string',
+    },
+    {
       name: 'bio',
       title: 'Bio',
-      type: 'bioPortableText',
+      type: 'simplePortableText',
     },
   ],
   preview: {
