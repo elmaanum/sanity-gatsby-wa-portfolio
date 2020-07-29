@@ -48,4 +48,4 @@ When updating the schema, two main actions need to be performed:
 
 ### Content
 
-Content should be managed via the Sanity Studio. Since there is a single dataset for all environments it doesn't matter from which deployment the content is modified.
+Content is managed via the Sanity Studio. Since there is a single dataset for all environments it doesn't matter from which deployment the content is modified.
