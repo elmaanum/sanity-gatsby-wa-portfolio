@@ -1,18 +1,30 @@
 @import '../styles/custom-media.css';
 @import '../styles/custom-properties.css';
 
-.content {
-  background: var(--color-white);
-  min-height: calc(100% - 73px - 120px);
-
-  @media (--media-min-small) {
-    min-height: calc(100% - 88px - 150px);
-  }
+:root {
+  --footer-height: 10em;
 }
 
-.footer {
-  border-top: 1px solid var(--color-very-light-gray);
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+}
 
+.content {
+  background: var(--color-white);
+  padding-bottom: var(--footer-height);
+}
+.contactInfo {
+  display: inline-block;
+}
+.footer {
+  background-color: #636363;
+  height: var(--footer-height);
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   @nest & a {
     color: inherit;
     text-decoration: none;
@@ -26,23 +38,36 @@
 }
 
 .footerWrapper {
-  box-sizing: border-box;
-  max-width: 960px;
-  padding: 4.5em 1.5em 1.5em;
-  margin: 0 auto;
-
-  @media (--media-min-small) {
+  /* max-width: 960px; */
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* @media (--media-min-small) {
     padding: 6em 2em 2em;
-  }
+  } */
 }
 
-.companyAddress {
-  text-align: center;
-  margin: 0 0 1rem;
+.textDivider {
+  padding: 0 1em 0 1em;
 }
 
-.siteInfo {
+.button {
+  position: relative;
+  background-color: #3a506b;
+  border: none;
+  color: white;
+  padding: 0.8em 2em;
   text-align: center;
-  font-size: var(--font-small-size);
-  line-height: var(--font-small-line-height);
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  margin: auto;
+}
+
+.footerElement {
+  margin: 1em 0 1em 0;
+  color: #ffffff;
 }
