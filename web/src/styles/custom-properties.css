@@ -1,15 +1,23 @@
 :root {
-  --font-family-sans: -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-sans: 'Montserrat', sans-serif;
 
+  /* from template */
   --color-black: #202123;
-  --color-dark-gray: #32373e;
-  --color-gray: #697a90;
   --color-light-gray: #b4bcc7;
   --color-very-light-gray: #e7ebed;
-  --color-white: #fff;
-  --color-accent: #156dff;
 
+  /* from design in Figma */
+  --color-white: #fff;
+  --color-gray: #7a7a7a;
+  --color-gray-dark: #333333;
+  --color-gray-medium: #636363;
+  --color-accent: #31c17c;
+  --color-shadow: #0b132b;
+  --color-primary: #3a506b;
+
+  /* ---------- */
   /* Typography */
+  /* ---------- */
   --unit: 16;
   --font-micro-size: calc(10 / var(--unit) * 1rem); /* 10px */
   --font-micro-line-height: calc(12 / 10); /* 12px */
@@ -26,4 +34,22 @@
   --font-title2-line-height: calc(33 / 24); /* 33px */
   --font-title1-size: calc(49 / var(--unit) * 1rem); /* 49px */
   --font-title1-line-height: calc(57 / 49); /* 57px */
+}
+
+.textH1 {
+  font-size: var(--font-title1-size);
+  line-height: var(--font-title1-line-height);
+  font-weight: bold;
+}
+
+.textH2 {
+  font-size: var(--font-title2-size);
+  line-height: var(--font-title2-line-height);
+  font-weight: 600;
+}
+
+.textBody {
+  font-size: var(--font-base-size);
+  line-height: var(--font-base-line-height);
+  font-weight: normal;
 }
