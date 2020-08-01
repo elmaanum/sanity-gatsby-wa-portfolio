@@ -1,15 +1,25 @@
 import React from 'react';
-// import { graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 // import {
 //   mapEdgesToNodes,
 //   filterOutDocsWithoutSlugs,
 //   filterOutDocsPublishedInTheFuture,
 // } from '../lib/helpers';
 // import Container from '../components/container';
-// import GraphQLErrorList from '../components/graphql-error-list';
+import GraphQLErrorList from '../components/graphql-error-list';
 // import ProjectPreviewGrid from '../components/project-preview-grid';
 // import SEO from '../components/seo';
 import Layout from '../containers/layout';
+
+export const query = graphql`
+  query IndexPageQuery {
+    services: allSanityService {
+      nodes {
+        title
+      }
+    }
+  }
+`;
 
 // export const query = graphql`
 //   query IndexPageQuery {
@@ -59,19 +69,21 @@ import Layout from '../containers/layout';
 //     }
 //   }
 // `;
-const IndexPage = () => {
-  // const { data, errors } = props;
-  // console.log(props, 'props');
 
-  // if (errors) {
-  //   return (
-  //     <Layout>
-  //       <GraphQLErrorList errors={errors} />
-  //     </Layout>
-  //   );
-  // }
+const IndexPage = (props) => {
+  const { data, errors } = props;
+  // console.log(data);
+  if (errors) {
+    return (
+      <Layout>
+        <GraphQLErrorList errors={errors} />
+      </Layout>
+    );
+  }
 
-  // const site = (data || {}).site;
+  const services = (data || {}).services.nodes;
+  // const services = serviceNodes.map((service) => service.title);
+
   // const projectNodes = (data || {}).projects
   //   ? mapEdgesToNodes(data.projects)
   //       .filter(filterOutDocsWithoutSlugs)
@@ -85,7 +97,7 @@ const IndexPage = () => {
   // }
 
   return (
-    <Layout>
+    <Layout services={services} headline="Test">
       {/* <SEO title="Whitten Associates" />
       <Container>
         <h1>Welcome to Whitten Associates</h1>

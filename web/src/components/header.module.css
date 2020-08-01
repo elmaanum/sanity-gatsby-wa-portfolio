@@ -6,6 +6,49 @@
   z-index: 100;
 }
 
+.topBar {
+  background-color: var(--color-white);
+  border-bottom-style: solid;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  background-color: var(--color-primary);
+  border: none;
+  color: var(--color-white);
+  padding: 0.4em 1em;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+  margin: 0.5em;
+}
+
+.navContainer {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+
+.navContainerServices {
+  flex: auto;
+}
+
+.navItem {
+  padding: 0.3em 0.8em;
+  color: var(--color-gray-dark);
+}
+
+.navSpacer {
+  border-left: 1px solid var(--color-gray);
+  margin: 0.3em;
+  height: 2em;
+  top: 50%;
+}
+
 .headline {
   background-color: var(--color-shadow);
   color: var(--color-white);
