@@ -6,6 +6,13 @@
   z-index: 100;
 }
 
+.headline {
+  background-color: var(--color-shadow);
+  color: var(--color-white);
+  padding: 0.4em;
+}
+
+/* 
 .wrapper {
   box-sizing: border-box;
   margin: 0 auto;
@@ -111,4 +118,4 @@
 
 .showNav {
   display: block;
-}
+} */
