@@ -1,6 +1,11 @@
 @import '../styles/custom-media.css';
 @import '../styles/custom-properties.css';
 
+a {
+  color: var(--color-gray-dark);
+  text-decoration: none;
+}
+
 .root {
   position: relative;
   z-index: 100;
@@ -8,9 +13,10 @@
 
 .topBar {
   background-color: var(--color-white);
-  border-bottom-style: solid;
+  border-bottom: 1px solid var(--color-gray-dark);
   display: flex;
   align-items: center;
+  color: var(--color-gray-dark);
 }
 
 .logo {
@@ -37,9 +43,14 @@
   flex: auto;
 }
 
+.navLink:hover {
+  /* font-weight: bold; */
+  /* text-shadow: 0 0 0.0005em #333, 0 0 0.0005em #333; */
+  color: #000;
+}
+
 .navItem {
-  padding: 0.3em 0.8em;
-  color: var(--color-gray-dark);
+  margin: 0.3em 0.8em;
 }
 
 .navSpacer {

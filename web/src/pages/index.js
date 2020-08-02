@@ -16,6 +16,9 @@ export const query = graphql`
     services: allSanityService {
       nodes {
         title
+        slug {
+          current
+        }
       }
     }
   }
@@ -72,7 +75,7 @@ export const query = graphql`
 
 const IndexPage = (props) => {
   const { data, errors } = props;
-  // console.log(data);
+
   if (errors) {
     return (
       <Layout>
@@ -82,22 +85,9 @@ const IndexPage = (props) => {
   }
 
   const services = (data || {}).services.nodes;
-  // const services = serviceNodes.map((service) => service.title);
-
-  // const projectNodes = (data || {}).projects
-  //   ? mapEdgesToNodes(data.projects)
-  //       .filter(filterOutDocsWithoutSlugs)
-  //       .filter(filterOutDocsPublishedInTheFuture)
-  //   : [];
-
-  // if (!site) {
-  //   throw new Error(
-  //     'Missing "Site settings". Open the studio at http://localhost:3333 and add some content to "Site settings" and restart the development server.',
-  //   );
-  // }
 
   return (
-    <Layout services={services} headline="Test">
+    <Layout services={services}>
       {/* <SEO title="Whitten Associates" />
       <Container>
         <h1>Welcome to Whitten Associates</h1>
