@@ -55,7 +55,7 @@ table {
 
 :root {
   --font-family-sans: 'Montserrat', sans-serif;
-
+  font-family: var(--font-family-sans);
   /* from template */
   --color-black: #202123;
   --color-light-gray: #b4bcc7;
