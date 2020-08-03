@@ -5,10 +5,10 @@ import React from 'react';
 //   filterOutDocsWithoutSlugs,
 //   filterOutDocsPublishedInTheFuture,
 // } from '../lib/helpers';
-import Container from '../components/container';
+// import Container from '../components/container';
 // import GraphQLErrorList from '../components/graphql-error-list';
-import ProjectPreviewGrid from '../components/project-preview-grid';
-import SEO from '../components/seo';
+// import ProjectPreviewGrid from '../components/project-preview-grid';
+// import SEO from '../components/seo';
 import Layout from '../containers/layout';
 
 // export const query = graphql`
@@ -86,11 +86,13 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <SEO title="Whitten Associates" />
+      {/* <SEO title="Whitten Associates" />
       <Container>
         <h1>Welcome to Whitten Associates</h1>
         <div>Site under construction!!</div>
-      </Container>
+      </Container> */}
+      <div>Div 1 - Content</div>
+      <div>Div 2 - Content</div>
     </Layout>
   );
 };

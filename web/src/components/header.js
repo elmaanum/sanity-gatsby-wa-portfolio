@@ -1,30 +1,15 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import Icon from './icon';
-import { cn } from '../lib/helpers';
-
 import styles from './header.module.css';
 
-const Header = ({ onHideNav, onShowNav, showNav, siteTitle }) => (
-  <div className={styles.root}>
-    <div className={styles.wrapper}>
-      <div className={styles.branding}>
-        <Link to="/">{siteTitle}</Link>
-      </div>
-
-      <button className={styles.toggleNavButton} onClick={showNav ? onHideNav : onShowNav}>
-        <Icon symbol="hamburger" />
-      </button>
-
-      <nav className={cn(styles.nav, showNav && styles.showNav)}>
-        <ul>
-          <li>
-            <Link to="/archive/">Archive</Link>
-          </li>
-        </ul>
-      </nav>
+const Header = ({ headline }) => (
+  <header className={styles.root}>
+    <div style={{ 'background-color': 'white', height: '4em', 'border-bottom-style': 'solid' }}>
+      <div>Dummy Logo</div>
+      <nav>Dummy Nav</nav>
     </div>
-  </div>
+    {headline && <div className={`${styles.headline} textH1`}>{headline}</div>}
+  </header>
 );
 
 export default Header;
