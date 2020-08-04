@@ -5,46 +5,42 @@
 //  * See: https://www.gatsbyjs.org/docs/node-apis/
 //  */
 
-// async function createProjectPages(graphql, actions, reporter) {
-//   const { createPage } = actions;
-//   const result = await graphql(`
-//     {
-//       allSanityProject(
-//         filter: { slug: { current: { ne: null } }, }
-//       ) {
-//         edges {
-//           node {
-//             id
-//             slug {
-//               current
-//             }
-//           }
-//         }
-//       }
-//     }
-//   `);
+async function createProjectPages(graphql, actions, reporter) {
+  const { createPage } = actions;
+  const result = await graphql(`
+    {
+      allSanityService(filter: { slug: { current: { ne: null } } }) {
+        edges {
+          node {
+            id
+            slug {
+              current
+            }
+          }
+        }
+      }
+    }
+  `);
 
-//   if (result.errors) throw result.errors;
+  if (result.errors) throw result.errors;
 
-//   const projectEdges = (result.data.allSanityProject || {}).edges || [];
+  const serviceEdges = (result.data.allSanityService || {}).edges || [];
 
-//   projectEdges
-//     .filter((edge) => !isFuture(edge.node.publishedAt))
-//     .forEach((edge) => {
-//       const id = edge.node.id;
-//       const slug = edge.node.slug.current;
-//       const path = `/project/${slug}/`;
+  serviceEdges.forEach((edge) => {
+    const id = edge.node.id;
+    const slug = edge.node.slug.current;
+    const path = `/service/${slug}/`;
 
-//       reporter.info(`Creating project page: ${path}`);
+    reporter.info(`Creating service page: ${path}`);
 
-//       createPage({
-//         path,
-//         component: require.resolve('./src/templates/project.js'),
-//         context: { id },
-//       });
-//     });
-// }
+    createPage({
+      path,
+      component: require.resolve('./src/templates/service.js'),
+      context: { id },
+    });
+  });
+}
 
-// exports.createPages = async ({ graphql, actions, reporter }) => {
-//   await createProjectPages(graphql, actions, reporter);
-// };
+exports.createPages = async ({ graphql, actions, reporter }) => {
+  await createProjectPages(graphql, actions, reporter);
+};
