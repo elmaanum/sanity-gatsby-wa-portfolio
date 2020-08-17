@@ -1,4 +1,4 @@
-import { Link, graphql } from 'gatsby';
+import { Link } from 'gatsby';
 import React from 'react';
 import styles from './header.module.css';
 
