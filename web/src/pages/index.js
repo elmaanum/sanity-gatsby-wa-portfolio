@@ -1,11 +1,40 @@
 import React from 'react';
 import GraphQLErrorList from '../components/graphql-error-list';
-// import SEO from '../components/seo';
+import SEO from '../components/seo';
 import Layout from '../containers/layout';
+import Container from '../components/container';
+import ServicePreviewGrid from '../components/service-preview-grid';
+import { mapEdgesToNodes } from '../lib/helpers';
+
+export const query = graphql`
+  query IndexPageQuery {
+    site: sanitySiteSettings(_id: { regex: "/(drafts.|)siteSettings/" }) {
+      title
+      description
+      keywords
+    }
+    services: allSanityService {
+      edges {
+        node {
+          id
+          mainImage {
+            asset {
+              _id
+            }
+            alt
+          }
+          title
+          slug {
+            current
+          }
+        }
+      }
+    }
+  }
+`;
 
 const IndexPage = (props) => {
-  const { errors } = props;
-
+  const { data, errors } = props;
   if (errors) {
     return (
       <Layout>
@@ -13,16 +42,14 @@ const IndexPage = (props) => {
       </Layout>
     );
   }
-
+  const site = (data || {}).site;
+  const serviceNodes = (data || {}).services ? mapEdgesToNodes(data.services) : [];
   return (
     <Layout>
-      {/* <SEO title="Whitten Associates" />
+      {/*<SEO title={site.title} description={site.description} keywords={site.keywords} />*/}
       <Container>
-        <h1>Welcome to Whitten Associates</h1>
-        <div>Site under construction!!</div>
-      </Container> */}
-      <div>Div 1 - Content</div>
-      <div>Div 2 - Content</div>
+        {serviceNodes && <ServicePreviewGrid nodes={serviceNodes}></ServicePreviewGrid>}
+      </Container>
     </Layout>
   );
 };
