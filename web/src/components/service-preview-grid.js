@@ -1,7 +1,7 @@
 import React from 'react';
 import ServicePreview from './service-preview';
 
-import styles from './project-preview-grid.module.css';
+import styles from './service-preview-grid.module.css';
 
 function ServicePreviewGrid(props) {
   return (

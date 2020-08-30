@@ -20,8 +20,25 @@ export const query = graphql`
           mainImage {
             asset {
               _id
+              url
             }
             alt
+            hotspot {
+              _key
+              _type
+              x
+              y
+              height
+              width
+            }
+            crop {
+              _key
+              _type
+              top
+              bottom
+              left
+              right
+            }
           }
           title
           slug {
