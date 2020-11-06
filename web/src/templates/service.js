@@ -4,6 +4,11 @@ import { graphql } from 'gatsby';
 import Container from '../components/container';
 import GraphQLErrorList from '../components/graphql-error-list';
 // import SEO from '../components/seo';
+import BlockContent from '../components/block-content';
+import { buildImageObj } from '../lib/helpers';
+import { imageUrlFor } from '../lib/image-url';
+
+import styles from './service.module.css';
 
 export const query = graphql`
   query ServiceTemplateQuery($id: String!) {
@@ -13,19 +18,71 @@ export const query = graphql`
       slug {
         current
       }
+      _rawBody
+      mainImage {
+        asset {
+          _id
+          url
+          _rev
+        }
+        alt
+        hotspot {
+          _key
+          _type
+          x
+          y
+          height
+          width
+        }
+        crop {
+          _key
+          _type
+          top
+          bottom
+          left
+          right
+        }
+      }
+      serviceSubtypes {
+        id
+        name
+      }
     }
   }
 `;
+const buildSubTypeList = (subtypes) =>
+  subtypes.map((type) => {
+    return <li className={styles.li}>{type.name}</li>;
+  });
 
 const ServiceTemplate = (props) => {
   const { data, errors } = props;
-  console.log(data);
+  const subtypes = buildSubTypeList(data.service.serviceSubtypes);
+  console.log(props);
   return (
     <Layout headline={data.service.title}>
-      <div>This is all about {data.service.title}</div>
       {errors && <SEO title="GraphQL Error" />}
       {/* {project && <SEO title={project.title || 'Untitled'} />} */}
-
+      <article className={styles.parent_container}>
+        <div className={styles.content_wrapper}>
+          {data.service.mainImage && data.service.mainImage.asset && (
+            <div className={styles.image_wrapper}>
+              <img
+                src={imageUrlFor(buildImageObj(data.service.mainImage))
+                  .width(1500)
+                  .height(Math.floor((9 / 16) * 800))
+                  .saturation(-100)
+                  .url()}
+                alt={data.service.mainImage.alt}
+              />
+            </div>
+          )}
+          <div className={styles.text_wrapper}>
+            {data.service._rawBody && <BlockContent blocks={data.service._rawBody || []} />}
+            <ul className={styles.ul}>{subtypes}</ul>
+          </div>
+        </div>
+      </article>
       {errors && (
         <Container>
           <GraphQLErrorList errors={errors} />
