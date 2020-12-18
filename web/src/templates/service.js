@@ -1,10 +1,14 @@
 import React from 'react';
-import Layout from '../containers/layout';
+
 import { graphql } from 'gatsby';
+import { Link } from 'gatsby';
+
+import Layout from '../containers/layout';
 import Container from '../components/container';
 import GraphQLErrorList from '../components/graphql-error-list';
 // import SEO from '../components/seo';
 import BlockContent from '../components/block-content';
+
 import { buildImageObj } from '../lib/helpers';
 import { imageUrlFor } from '../lib/image-url';
 
@@ -52,7 +56,11 @@ export const query = graphql`
 `;
 const buildSubTypeList = (subtypes) =>
   subtypes.map((type) => {
-    return <li className={styles.li}>{type.name}</li>;
+    return (
+      <li key={type} className={styles.li}>
+        {type.name}
+      </li>
+    );
   });
 
 const ServiceTemplate = (props) => {
@@ -63,7 +71,7 @@ const ServiceTemplate = (props) => {
     <Layout headline={data.service.title}>
       {errors && <SEO title="GraphQL Error" />}
       {/* {project && <SEO title={project.title || 'Untitled'} />} */}
-      <article className={styles.parent_container}>
+      <div className={styles.parent_container}>
         <div className={styles.content_wrapper}>
           {data.service.mainImage && data.service.mainImage.asset && (
             <div className={styles.image_wrapper}>
@@ -82,7 +90,10 @@ const ServiceTemplate = (props) => {
             <ul className={styles.ul}>{subtypes}</ul>
           </div>
         </div>
-      </article>
+        <Link to={`/`}>
+          <button className={styles.responsiveButton}>Contact Us</button>
+        </Link>
+      </div>
       {errors && (
         <Container>
           <GraphQLErrorList errors={errors} />
