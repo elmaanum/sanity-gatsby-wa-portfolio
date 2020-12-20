@@ -2,9 +2,10 @@ import React from 'react';
 import GraphQLErrorList from '../components/graphql-error-list';
 import Layout from '../containers/layout';
 import Container from '../components/container';
+import PersonInfo from '../components/personInfo';
 
 const AboutUsPage = (props) => {
-  const { errors } = props;
+  const { errors, data } = props;
   if (errors) {
     return (
       <Layout>
@@ -28,12 +29,7 @@ const AboutUsPage = (props) => {
           process and successful conclusion.  
         </div>
         <div>
-          <div>
-            person text
-          </div>
-          <div>
-            person image
-          </div>
+          {data.allSanityPerson.nodes.map((personData) => <PersonInfo personData={personData} />)}
         </div>
       </Container>
     </Layout>
@@ -42,12 +38,18 @@ const AboutUsPage = (props) => {
 
 export default AboutUsPage;
 
-
 export const query = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
+  {
+    allSanityPerson {
+      nodes {
+        name
+        image {
+          alt
+          asset {
+            url
+          }
+        }
+        _rawBio
       }
     }
   }

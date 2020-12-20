@@ -1,0 +1,6 @@
+@import '../styles/custom-media.css';
+@import '../styles/custom-properties.css';
+
+.personImage {
+  width: 50%;
+}
