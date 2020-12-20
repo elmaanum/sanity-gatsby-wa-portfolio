@@ -103,8 +103,33 @@ table {
   font-weight: 600;
 }
 
+.textH3 {
+  font-size: var(--font-title3-size);
+  line-height: var(--font-title3-line-height);
+  font-weight: normal;
+}
+
 .textBody {
   font-size: var(--font-base-size);
   line-height: var(--font-base-line-height);
   font-weight: normal;
+}
+
+.button {
+  border: none;
+  color: var(--color-white);
+  padding: 0.8em 1em;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.accent {
+  background-color: var(--color-accent);
+}
+
+.primary {
+  background-color: var(--color-primary);
 }

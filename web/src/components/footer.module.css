@@ -40,21 +40,6 @@
   padding: 0 1em 0 1em;
 }
 
-.button {
-  position: relative;
-  background-color: var(--color-primary);
-  border: none;
-  color: var(--color-white);
-  padding: 0.8em 2em;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 4px;
-  margin: auto;
-}
-
 .footerElement {
   margin: 1em 0 1em 0;
   color: var(--color-white);
