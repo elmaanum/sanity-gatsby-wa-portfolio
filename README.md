@@ -13,12 +13,12 @@ Initially created from template project [sanity.io/create](https://www.sanity.io
 ## Quick start
 
 1. Clone this repository from your GitHub account
-2. `npm install` in the project root folder on local
-3. `npm run dev` to start the Studio and frontend locally
+1. `npm install` in the project root folder on local
+1. `npm run dev` to start the Studio and frontend locally
    - Your Studio should be running on [http://localhost:3333](http://localhost:3333)
    - Your frontend should be running on [http://localhost:8000](http://localhost:8000)
    - GraphiQL should be running on [http://localhost:8000/\_\_\_graphql](http://localhost:8000/___graphql)
-4. `npm run build` to build to production locally
+1. `npm run build` to build to production locally
 
 ## Architecture and Deploy
 
