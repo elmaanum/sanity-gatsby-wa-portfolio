@@ -23,7 +23,7 @@ const Footer = () => {
         </div>
         {/* TODO: Link to "Contact Us" modal when complete */}
         <div className={styles.footerElement}>
-          <div className={styles.button}>Contact Us</div>
+          <div className="button primary">Contact Us</div>
         </div>
       </div>
     </footer>
