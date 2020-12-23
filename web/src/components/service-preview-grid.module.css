@@ -1,0 +1,19 @@
+@import '../styles/custom-media.css';
+@import '../styles/custom-properties.css';
+
+.grid {
+  margin: 0 4em 0 4em;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1.5em;
+
+  @media (--media-min-small) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (--media-min-medium) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
