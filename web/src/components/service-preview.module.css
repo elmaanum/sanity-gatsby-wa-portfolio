@@ -2,7 +2,7 @@
 @import '../styles/custom-media.css';
 
 .leadMediaThumb {
-  z-index: 1000;
+  /* z-index: 1000; */
   position: relative;
   padding-bottom: 100%;
   @nest & img {
@@ -22,7 +22,6 @@
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: var(--font-family-sans);
   text-align: center;
 
   @media (--media-min-small) {
@@ -48,10 +47,10 @@
   position: absolute;
   bottom: 8px;
   right: 16px;
-  color: var(--color-white);
+  /* color: var(--color-white);
   background-color: var(--color-accent);
   border-radius: 5px;
-  border: none;
+  border: none; */
 
   @media (--media-min-small) {
     font-size: var(--font-small-size);
