@@ -2,15 +2,13 @@ import React from 'react';
 
 import { graphql } from 'gatsby';
 import { Link } from 'gatsby';
+import Img from 'gatsby-image';
 
 import Layout from '../containers/layout';
 import Container from '../components/container';
 import GraphQLErrorList from '../components/graphql-error-list';
-// import SEO from '../components/seo';
 import BlockContent from '../components/block-content';
-
-import { buildImageObj } from '../lib/helpers';
-import { imageUrlFor } from '../lib/image-url';
+// import SEO from '../components/seo';
 
 import styles from './service.module.css';
 
@@ -28,6 +26,9 @@ export const query = graphql`
           _id
           url
           _rev
+          fluid(maxHeight: 325) {
+            ...GatsbySanityImageFluid
+          }
         }
         alt
         hotspot {
@@ -52,6 +53,26 @@ export const query = graphql`
         name
       }
     }
+    projects: allSanityProject(filter: { serviceTypes: { elemMatch: { id: { eq: $id } } } }) {
+      nodes {
+        id
+        images {
+          _key
+          _type
+          caption
+          alt
+          priority
+          asset {
+            _id
+            url
+            fluid(maxWidth: 1300) {
+              ...GatsbySanityImageFluid
+            }
+          }
+        }
+        title
+      }
+    }
   }
 `;
 const buildSubTypeList = (subtypes) =>
@@ -65,33 +86,25 @@ const buildSubTypeList = (subtypes) =>
 
 const ServiceTemplate = (props) => {
   const { data, errors } = props;
-  const subtypes = buildSubTypeList(data.service.serviceSubtypes);
-  console.log(props);
+  const { service } = data;
+  const subtypes = buildSubTypeList(service.serviceSubtypes);
+
   return (
-    <Layout headline={data.service.title}>
+    <Layout headline={service.title}>
       {errors && <SEO title="GraphQL Error" />}
-      {/* {project && <SEO title={project.title || 'Untitled'} />} */}
-      <div className={styles.parent_container}>
-        <div className={styles.content_wrapper}>
-          {data.service.mainImage && data.service.mainImage.asset && (
-            <div className={styles.image_wrapper}>
-              <img
-                src={imageUrlFor(buildImageObj(data.service.mainImage))
-                  .width(1500)
-                  .height(Math.floor((9 / 16) * 800))
-                  .saturation(-100)
-                  .url()}
-                alt={data.service.mainImage.alt}
-              />
-            </div>
-          )}
-          <div className={styles.text_wrapper}>
-            {data.service._rawBody && <BlockContent blocks={data.service._rawBody || []} />}
-            <ul className={styles.ul}>{subtypes}</ul>
-          </div>
+
+      <div className={styles.content_wrapper}>
+        {service.mainImage && service.mainImage.asset && (
+          <Img className={styles.image_wrapper} fluid={service.mainImage.asset.fluid}></Img>
+        )}
+        <div className={styles.text_wrapper}>
+          {service._rawBody && <BlockContent blocks={service._rawBody || []} />}
+          <ul className={styles.ul}>{subtypes}</ul>
         </div>
-        <Link to={`/`}>
-          <button className={styles.responsiveButton}>Contact Us</button>
+        <Link to={`/about-us`}>
+          <button className={[styles.responsiveButton, styles.buttonAccent].join(' ')}>
+            Contact Us
+          </button>
         </Link>
       </div>
       {errors && (
