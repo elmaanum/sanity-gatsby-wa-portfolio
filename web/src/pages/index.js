@@ -5,6 +5,7 @@ import Layout from '../containers/layout';
 import Container from '../components/container';
 import ServicePreviewGrid from '../components/service-preview-grid';
 import { mapEdgesToNodes } from '../lib/helpers';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const query = graphql`
   query IndexPageQuery {
