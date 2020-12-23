@@ -27,15 +27,6 @@ const createAccoladeCard = (text) => (
   </div>
 );
 
-const createServiceCard = (serviceName) => (
-  <div className={styles.serviceCard}>
-    <div className={`${styles.serviceCardHeader} textH3`}>{serviceName}</div>
-    <Link className={styles.serviceCtaButton} to={`/${serviceName}`}>
-      <div className={`button accent ${styles.serviceCtaButton}`}>Learn More</div>
-    </Link>
-  </div>
-);
-
 const createLogoCard = (logoUrl, altText) => (
   <div className={styles.logoBox}>
     <img className={styles.logo} src={logoUrl} alt={altText} />
