@@ -18,17 +18,35 @@ export default {
       name: 'description',
       type: 'text',
       title: 'Description',
-      description: 'Describe your portfolio for search engines and social media.',
+      description: 'Describe the organization [not used]',
     },
     {
       name: 'keywords',
       type: 'array',
       title: 'Keywords',
-      description: 'Add keywords that describes your portfolio.',
+      description: 'Add keywords that describes your organization [not used].',
       of: [{ type: 'string' }],
       options: {
         layout: 'tags',
       },
+    },
+    {
+      name: 'email',
+      type: 'string',
+      title: 'Email',
+      description: 'Company general email address',
+    },
+    {
+      name: 'phonenumber',
+      type: 'string',
+      title: 'Phone Number',
+      description: 'Company general phone number',
+    },
+    {
+      name: 'address',
+      type: 'string',
+      title: 'Address',
+      description: 'Company address (single line)',
     },
   ],
 };
