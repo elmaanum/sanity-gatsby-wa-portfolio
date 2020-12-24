@@ -5,8 +5,36 @@ import Layout from '../containers/layout';
 import Container from '../components/container';
 import GraphQLErrorList from '../components/graphql-error-list';
 import HeroImage from '../components/hero';
-// import SEO from '../components/seo';
+import Project from '../components/project';
+import SEO from '../components/seo';
 import styles from './service.module.css';
+
+const ServiceTemplate = (props) => {
+  const { data, errors } = props;
+  const { projects, service } = data;
+
+  return (
+    <Layout headline={service.title}>
+      {errors && <SEO title="GraphQL Error" />}
+      <HeroImage
+        imageFluid={service.mainImage}
+        imageText={service._rawBody}
+        imageTextList={service.serviceSubtypes}
+        buttonText={'Contact Us'}
+        buttonLinkTo={'/about-us'}
+        buttonStyle={styles.responsiveButton}
+      />
+      {projects.nodes && projects.nodes.map((projectNode) => <Project project={projectNode} />)}
+      {errors && (
+        <Container>
+          <GraphQLErrorList errors={errors} />
+        </Container>
+      )}
+    </Layout>
+  );
+};
+
+export default ServiceTemplate;
 
 export const query = graphql`
   query ServiceTemplateQuery($id: String!) {
@@ -71,29 +99,3 @@ export const query = graphql`
     }
   }
 `;
-
-const ServiceTemplate = (props) => {
-  const { data, errors } = props;
-  const { service } = data;
-
-  return (
-    <Layout headline={service.title}>
-      {errors && <SEO title="GraphQL Error" />}
-      <HeroImage
-        imageFluid={service.mainImage}
-        imageText={service._rawBody}
-        imageTextList={service.serviceSubtypes}
-        buttonText={'Contact Us'}
-        buttonLinkTo={'/about-us'}
-        buttonStyle={styles.responsiveButton}
-      />
-      {errors && (
-        <Container>
-          <GraphQLErrorList errors={errors} />
-        </Container>
-      )}
-    </Layout>
-  );
-};
-
-export default ServiceTemplate;
