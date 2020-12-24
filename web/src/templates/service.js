@@ -1,15 +1,11 @@
 import React from 'react';
-
 import { graphql } from 'gatsby';
-import { Link } from 'gatsby';
-import Img from 'gatsby-image';
 
 import Layout from '../containers/layout';
 import Container from '../components/container';
 import GraphQLErrorList from '../components/graphql-error-list';
-import BlockContent from '../components/block-content';
+import HeroImage from '../components/hero';
 // import SEO from '../components/seo';
-
 import styles from './service.module.css';
 
 export const query = graphql`
@@ -75,38 +71,22 @@ export const query = graphql`
     }
   }
 `;
-const buildSubTypeList = (subtypes) =>
-  subtypes.map((type) => {
-    return (
-      <li key={type} className={styles.li}>
-        {type.name}
-      </li>
-    );
-  });
 
 const ServiceTemplate = (props) => {
   const { data, errors } = props;
   const { service } = data;
-  const subtypes = buildSubTypeList(service.serviceSubtypes);
 
   return (
     <Layout headline={service.title}>
       {errors && <SEO title="GraphQL Error" />}
-
-      <div className={styles.content_wrapper}>
-        {service.mainImage && service.mainImage.asset && (
-          <Img className={styles.image_wrapper} fluid={service.mainImage.asset.fluid}></Img>
-        )}
-        <div className={styles.text_wrapper}>
-          {service._rawBody && <BlockContent blocks={service._rawBody || []} />}
-          <ul className={styles.ul}>{subtypes}</ul>
-        </div>
-        <Link to={`/about-us`}>
-          <button className={[styles.responsiveButton, styles.buttonAccent].join(' ')}>
-            Contact Us
-          </button>
-        </Link>
-      </div>
+      <HeroImage
+        imageFluid={service.mainImage}
+        imageText={service._rawBody}
+        imageTextList={service.serviceSubtypes}
+        buttonText={'Contact Us'}
+        buttonLinkTo={'/about-us'}
+        buttonStyle={styles.responsiveButton}
+      />
       {errors && (
         <Container>
           <GraphQLErrorList errors={errors} />
