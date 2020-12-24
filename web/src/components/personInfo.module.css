@@ -1,0 +1,57 @@
+@import '../styles/custom-media.css';
+@import '../styles/custom-properties.css';
+
+.bioContainer {
+  width: 100%;
+  display: flex;
+  margin: 0.5em;
+}
+
+.bioContainer:nth-of-type(odd) {
+  flex-direction: row-reverse;
+}
+
+.personImage {
+  padding: 1em;
+  width: 50%;
+  overflow: hidden;
+}
+
+.personImage img {
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+  display: block;
+}
+
+.personText {
+  padding: 1em;
+  width: 50%;
+}
+
+.bio {
+  margin: 0.5em;
+  text-align: justify;
+}
+
+.name {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 44px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+.credentials {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 29px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
