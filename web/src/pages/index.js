@@ -1,14 +1,10 @@
 import React from 'react';
-import { Link } from 'gatsby';
 import GraphQLErrorList from '../components/graphql-error-list';
-import SEO from '../components/seo';
+// import SEO from '../components/seo';
 import Layout from '../containers/layout';
 import Container from '../components/container';
-
-// branch
 import ServicePreviewGrid from '../components/service-preview-grid';
 import { mapEdgesToNodes } from '../lib/helpers';
-//
 
 import heroImage from '../assets/indexHeroImage.jpg';
 import logo1 from '../assets/logo1.png';
@@ -17,22 +13,12 @@ import logo3 from '../assets/logo3.png';
 import styles from './index.module.css';
 import '../styles/custom-properties.css';
 
-const services = ['Architecture', 'Land Consulting', 'Development Consulting', 'Planning'];
 const accoladesText = ["they're just great", '40 projects', '50 combined years of experience'];
 const logoImages = [logo1, logo2, logo3];
 
 const createAccoladeCard = (text) => (
   <div className={styles.accoladeBox}>
     <div className={`${styles.accoladeText} textH3`}>{text}</div>
-  </div>
-);
-
-const createServiceCard = (serviceName) => (
-  <div className={styles.serviceCard}>
-    <div className={`${styles.serviceCardHeader} textH3`}>{serviceName}</div>
-    <Link className={styles.serviceCtaButton} to={`/${serviceName}`}>
-      <div className={`button accent ${styles.serviceCtaButton}`}>Learn More</div>
-    </Link>
   </div>
 );
 
@@ -96,6 +82,7 @@ const IndexPage = (props) => {
       </Layout>
     );
   }
+
   const site = (data || {}).site;
   const serviceNodes = (data || {}).services ? mapEdgesToNodes(data.services) : [];
   return (
