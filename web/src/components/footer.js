@@ -1,33 +1,47 @@
 import React from 'react';
 import styles from './footer.module.css';
+import { StaticQuery, graphql } from 'gatsby';
 
-const Footer = () => {
-  return (
-    <footer className={styles.footer}>
-      <div className={styles.footerWrapper}>
-        <div className={styles.footerElement}>
-          {/* TODO: Grab org info from GraphQL API when implemented */}
-          <span className={styles.contactInfo}>
-            <a target="_blank" href="https://goo.gl/maps/hwHKpixcufFHyZWGA">
-              4159 Heatherton Place, Minnetonka, MN 55345
-            </a>
-          </span>
-          <span className={styles.textDivider}>|</span>
-          <span className={styles.contactInfo}>
-            <a href="tel:612-747-0771">(612) 747-0771</a>
-          </span>
-          <span className={styles.textDivider}>|</span>
-          <span className={styles.contactInfo}>
-            <a href="mailto: info@whittenassociates.com">info@whittenassociates.com</a>
-          </span>
+const Footer = () => (
+  <StaticQuery
+    query={graphql`
+      query FooterQuery {
+        site: sanitySiteSettings {
+          phonenumber
+          email
+          address
+        }
+      }
+    `}
+    render={({ site: { address, phonenumber, email } }) => (
+      <footer className={styles.footer}>
+        <div className={styles.footerWrapper}>
+          <div className={styles.footerElement}>
+            <span className={styles.contactInfo}>
+              <a
+                target="_blank"
+                href={`https://www.google.com/maps/search/?api=1&query=${address}`}
+              >
+                {address}
+              </a>
+            </span>
+            <span className={styles.textDivider}>|</span>
+            <span className={styles.contactInfo}>
+              <a href={`tel:${phonenumber}`}>{phonenumber}</a>
+            </span>
+            <span className={styles.textDivider}>|</span>
+            <span className={styles.contactInfo}>
+              <a href={`mailto:${email}`}>{email}</a>
+            </span>
+          </div>
+          {/* TODO: Link to "Contact Us" modal when complete */}
+          <div className={styles.footerElement}>
+            <div className="button primary">Contact Us</div>
+          </div>
         </div>
-        {/* TODO: Link to "Contact Us" modal when complete */}
-        <div className={styles.footerElement}>
-          <div className={styles.button}>Contact Us</div>
-        </div>
-      </div>
-    </footer>
-  );
-};
+      </footer>
+    )}
+  />
+);
 
 export default Footer;
