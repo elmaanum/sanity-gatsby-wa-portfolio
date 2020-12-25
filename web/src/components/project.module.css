@@ -1,2 +1,15 @@
 @import '../styles/custom-media.css';
 @import '../styles/custom-properties.css';
+
+.projectHeader {
+  margin: 2em 0 0 2em;
+}
+
+.projectDiv {
+  box-sizing: border-box;
+  margin: 0 auto;
+
+  @media (--media-min-large) {
+    padding: 2em 10em 4em 10em;
+  }
+}

@@ -1,25 +1,20 @@
 import React from 'react';
-import Img from 'gatsby-image';
-import { Carousel } from 'react-bootstrap';
+
 import Container from './container';
+import CarouselComponent from './carousel';
 
 import styles from './project.module.css';
 
 function Project(props) {
-  const { project } = props;
+  const { projects } = props;
   return (
     <Container>
-      <h1>{project.title}</h1>
-      <Carousel>
-        {project.images &&
-          project.images.map((image) => {
-            return (
-              <Carousel.Item>
-                <Img fluid={image.asset.fluid} />
-              </Carousel.Item>
-            );
-          })}
-      </Carousel>
+      <h1 className={`${styles.projectHeader} textH2`}>Projects</h1>
+      {projects.nodes.map((projectNode) => (
+        <div className={styles.projectDiv}>
+          <CarouselComponent images={projectNode.images} />
+        </div>
+      ))}
     </Container>
   );
 }

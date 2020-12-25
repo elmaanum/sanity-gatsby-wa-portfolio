@@ -16,15 +16,17 @@ const ServiceTemplate = (props) => {
   return (
     <Layout headline={service.title}>
       {errors && <SEO title="GraphQL Error" />}
-      <HeroImage
-        imageFluid={service.mainImage}
-        imageText={service._rawBody}
-        imageTextList={service.serviceSubtypes}
-        buttonText={'Contact Us'}
-        buttonLinkTo={'/about-us'}
-        buttonStyle={styles.responsiveButton}
-      />
-      {projects.nodes && projects.nodes.map((projectNode) => <Project project={projectNode} />)}
+      {service && (
+        <HeroImage
+          imageFluid={service.mainImage}
+          imageText={service._rawBody}
+          imageTextList={service.serviceSubtypes}
+          buttonText={'Contact Us'}
+          buttonLinkTo={'/about-us'}
+          buttonStyle={styles.responsiveButton}
+        />
+      )}
+      {projects.nodes && <Project projects={projects} />}
       {errors && (
         <Container>
           <GraphQLErrorList errors={errors} />
@@ -80,6 +82,8 @@ export const query = graphql`
     projects: allSanityProject(filter: { serviceTypes: { elemMatch: { id: { eq: $id } } } }) {
       nodes {
         id
+        title
+        _rawDescription
         images {
           _key
           _type
@@ -89,12 +93,11 @@ export const query = graphql`
           asset {
             _id
             url
-            fluid(maxWidth: 1300) {
+            fluid(maxWidth: 1300, maxHeight: 650) {
               ...GatsbySanityImageFluid
             }
           }
         }
-        title
       }
     }
   }
