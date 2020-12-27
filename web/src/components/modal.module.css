@@ -1,0 +1,27 @@
+.modalContainer {
+  position: absolute;
+  width: 80%;
+  max-width: 1000px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: 15%;
+  height: 75%;
+  max-height: 500px;
+  background: grey;
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  display: block;
+  z-index: 101;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgb(11, 19, 43, 0.9);
+  z-index: 100;
+}

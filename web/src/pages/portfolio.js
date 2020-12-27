@@ -1,10 +1,14 @@
 import React from 'react';
+import Dropdown from 'react-dropdown';
 import Layout from '../containers/layout';
 import styles from './portfolio.module.css';
+import Modal from '../components/modal.js';
 import { buildImageObj } from '../lib/helpers';
 import { imageUrlFor } from '../lib/image-url';
-import Dropdown from 'react-dropdown';
+import ProjectViewer from '../components/project-viewer';
+
 import 'react-dropdown/style.css';
+import '../styles/layout.css';
 
 export const query = graphql`
   query PortfolioPageQuery {
@@ -18,6 +22,7 @@ export const query = graphql`
           serviceTypes {
             title
           }
+          _rawDescription
           images {
             _key
             _type
@@ -45,26 +50,30 @@ export const query = graphql`
   }
 `;
 
-const createProjectTile = (project) => (
-  <div className={styles.projectTile}>
-    <img
-      className={styles.projectImage}
-      src={imageUrlFor(buildImageObj(project.image)).height(300).width(300).fit('fill').url()}
-    />
+const createProjectTile = (project, onClickProject) => (
+  <div className={styles.projectTile} key={project.slug}>
+    <button>
+      <img
+        onClick={() => onClickProject(project)}
+        className={styles.projectImage}
+        src={imageUrlFor(buildImageObj(project.images[0])).height(300).width(350).fit('fill').url()}
+      />
+    </button>
     <div className={`${styles.projectName} textH3`}>{project.title}</div>
     <div>{project.service}</div>
   </div>
 );
 
 class PortfolioPage extends React.Component {
-  state = { projectsList: [] };
+  state = { projectsList: [], showModal: false, selectedProject: undefined };
 
   componentWillMount = () => {
     this.allProjects = this.props.data.allSanityProject.edges.map(({ node }) => ({
       title: node.title,
       slug: node.slug.current,
-      image: node.images.reduce((max, image) => (max.priority > image.priority ? max : image)),
+      images: node.images.sort((a, b) => (a.priority < b.priority ? 1 : -1)),
       service: node.serviceTypes[0] ? node.serviceTypes[0].title : '',
+      description: node._rawDescription,
     }));
 
     let serviceSet = new Set(
@@ -73,14 +82,31 @@ class PortfolioPage extends React.Component {
         .map((item) => item.title),
     );
     this.serviceArray = ['all', ...serviceSet];
+    this.updateProjectList('all');
   };
 
-  _onSelect = (event) => {
+  _onSelectServiceType = (event) => this.updateProjectList(event.value);
+
+  _onClickProject = (project) => {
+    this.setState({
+      showModal: true,
+      selectedProject: project,
+    });
+  };
+
+  _onClickClose = () => {
+    this.setState({
+      showModal: false,
+      selectedProject: undefined,
+    });
+  };
+
+  updateProjectList = (value) => {
     this.setState({
       projectsList:
-        event.value == 'all'
+        value == 'all'
           ? this.allProjects
-          : this.allProjects.filter((project) => project.service == event.value),
+          : this.allProjects.filter((project) => project.service == value),
     });
   };
 
@@ -92,14 +118,21 @@ class PortfolioPage extends React.Component {
           <Dropdown
             className={styles.dropdown}
             options={this.serviceArray}
-            onChange={this._onSelect}
+            onChange={this._onSelectServiceType}
             value={'all'}
           />
           <pre>&nbsp;projects</pre>
         </div>
         <div className={styles.projectsListContainer}>
-          {this.state.projectsList.map((project) => createProjectTile(project))}
+          {this.state.projectsList.map((project) =>
+            createProjectTile(project, this._onClickProject),
+          )}
         </div>
+        {this.state.showModal && (
+          <Modal>
+            <ProjectViewer project={this.state.selectedProject} closeViewer={this._onClickClose} />
+          </Modal>
+        )}
       </Layout>
     );
   }
