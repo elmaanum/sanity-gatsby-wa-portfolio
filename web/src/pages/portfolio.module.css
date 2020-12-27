@@ -1,0 +1,38 @@
+.projectsListContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.projectTile {
+  margin: 1rem;
+}
+
+.projectImage {
+  cursor: pointer;
+}
+
+.projectImage:hover {
+  transform: scale(1.01, 1.01);
+}
+
+.projectImage:hover::after {
+  opacity: 1;
+}
+
+.projectName {
+  font-weight: bold;
+}
+
+.selectionLine {
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+}
+
+.dropdown {
+  display: inline-block;
+  min-width: 200px;
+  cursor: pointer;
+}
