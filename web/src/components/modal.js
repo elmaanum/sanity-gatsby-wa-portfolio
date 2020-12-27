@@ -21,7 +21,9 @@ class Modal extends Component {
   _render() {
     ReactDOM.render(
       <div className={styles.background}>
-        <div className={styles.modalContainer}>{this.props.children}</div>
+        <div style={this.props.style ? this.props.style : {}} className={styles.modalContainer}>
+          {this.props.children}
+        </div>
       </div>,
       this.modalTarget,
     );
