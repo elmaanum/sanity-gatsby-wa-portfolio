@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './footer.module.css';
 import { StaticQuery, graphql } from 'gatsby';
 import ContactUs from './contact-us.js';
-import Modal from '../components/modal.js';
 
 const Footer = () => (
   <StaticQuery
@@ -38,22 +37,11 @@ const Footer = () => (
           </div>
           {/* TODO: Link to "Contact Us" modal when complete */}
           <div className={styles.footerElement}>
-            <div className="button primary">Contact Us</div>
+            <ContactUs>
+              <div className={`${styles.contactUsButton} button primary`}>Contact Us</div>
+            </ContactUs>
           </div>
         </div>
-        {true && (
-          <Modal
-            style={{
-              width: '80%',
-              height: '75%',
-              maxWidth: '840px',
-              maxHeight: '500px',
-              top: '10%',
-            }}
-          >
-            <ContactUs />
-          </Modal>
-        )}
       </footer>
     )}
   />

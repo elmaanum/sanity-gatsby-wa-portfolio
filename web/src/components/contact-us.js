@@ -1,9 +1,8 @@
 import React from 'react';
-import { buildImageObj } from '../lib/helpers';
-import { imageUrlFor } from '../lib/image-url';
 import styles from './contact-us.module.css';
 import BlockContent from '../components/block-content';
 import iconClose from '../assets/close-button-grey.svg';
+import Modal from '../components/modal.js';
 
 const encode = (data) => {
   return Object.keys(data)
@@ -23,6 +22,7 @@ info@whittenassociates.com
 
 class ContactUs extends React.Component {
   state = {
+    showModal: false,
     formData: {
       name: '',
       email: '',
@@ -60,68 +60,98 @@ class ContactUs extends React.Component {
     console.log('Conventional form submit detected!');
   };
 
+  onClickContactUsButton = () => {
+    this.setState({
+      showModal: true,
+    });
+  };
+
+  onClickClose = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
+
   render() {
     return (
-      <div className={styles.mainContainer}>
-        <div className={styles.leftFrame}>
-          <div className={`${styles.leftText} textH2`}>Let's Talk!</div>
-          <div className={`${styles.leftText} textBody`}>{mainText}</div>
-        </div>
-        <div className={styles.rightFrame}>
-          <div className={styles.formContainer}>
-            <form className={styles.formItems} onSubmit={this.onFormSubmit}>
-              <div className={styles.formSet}>
-                <label className="textBody">Name</label>
-                <input
-                  className={styles.inputShort}
-                  type="text"
-                  name="name"
-                  value={this.state.formData.name}
-                  onChange={this.onInputChange}
-                />
+      <div>
+        <div onClick={this.onClickContactUsButton}>{this.props.children}</div>
+        {this.state.showModal && (
+          <Modal
+            style={{
+              width: '80%',
+              height: '75%',
+              maxWidth: '840px',
+              maxHeight: '500px',
+              top: '10%',
+            }}
+          >
+            <div className={styles.mainContainer}>
+              <div className={styles.leftFrame}>
+                <div className={`${styles.leftText} textH2`}>Let's Talk!</div>
+                <div className={`${styles.leftText} textBody`}>{mainText}</div>
               </div>
-              <div className={styles.formSet}>
-                <label className="textBody">Email*</label>
-                <input
-                  className={styles.inputShort}
-                  type="email"
-                  name="email"
-                  value={this.state.formData.email}
-                  onChange={this.onInputChange}
-                />
+              <div className={styles.rightFrame}>
+                <div className={styles.formContainer}>
+                  <form className={styles.formItems} onSubmit={this.onFormSubmit}>
+                    <div className={styles.formSet}>
+                      <label className="textBody">Name</label>
+                      <input
+                        className={styles.inputShort}
+                        type="text"
+                        name="name"
+                        value={this.state.formData.name}
+                        onChange={this.onInputChange}
+                      />
+                    </div>
+                    <div className={styles.formSet}>
+                      <label className="textBody">Email*</label>
+                      <input
+                        className={styles.inputShort}
+                        type="email"
+                        name="email"
+                        value={this.state.formData.email}
+                        onChange={this.onInputChange}
+                      />
+                    </div>
+                    <div className={styles.formSet}>
+                      <label className="textBody">Company</label>
+                      <input
+                        className={styles.inputShort}
+                        type="text"
+                        name="company"
+                        value={this.state.formData.company}
+                        onChange={this.onInputChange}
+                      />
+                    </div>
+                    <div className={styles.formSet}>
+                      <label className="textBody">Message</label>
+                      <textarea
+                        className={styles.inputTall}
+                        type="text"
+                        name="message"
+                        value={this.state.term}
+                        onChange={this.onInputChange}
+                      />
+                    </div>
+                  </form>
+                  <button
+                    onClick={this.submitClicked}
+                    className={`${styles.submitButtom} button accent`}
+                  >
+                    Start the Conversation
+                  </button>
+                </div>
               </div>
-              <div className={styles.formSet}>
-                <label className="textBody">Company</label>
-                <input
-                  className={styles.inputShort}
-                  type="text"
-                  name="company"
-                  value={this.state.formData.company}
-                  onChange={this.onInputChange}
-                />
-              </div>
-              <div className={styles.formSet}>
-                <label className="textBody">Message</label>
-                <textarea
-                  className={styles.inputTall}
-                  type="text"
-                  name="message"
-                  value={this.state.term}
-                  onChange={this.onInputChange}
-                />
-              </div>
-            </form>
-            <button onClick={this.submitClicked} className={`${styles.submitButtom} button accent`}>
-              Start the Conversation
-            </button>
-          </div>
-        </div>
-        <img
-          // onClick={this._onButtonClicked}
-          className={styles.iconClose}
-          src={iconClose}
-          alt={'close'}
-        />
+              <img
+                onClick={this.onClickClose}
+                className={styles.iconClose}
+                src={iconClose}
+                alt={'close'}
+              />
+            </div>
+          </Modal>
+        )}
       </div>
     );
   }

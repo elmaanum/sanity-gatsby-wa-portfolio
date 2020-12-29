@@ -42,7 +42,6 @@
 }
 
 .inputShort {
-  /* height: 1.5em; */
   padding: 0.5em;
 }
 
@@ -53,7 +52,7 @@
 
 .submitButtom {
   float: right;
-  margin-top: 1em;
+  margin-top: 2em;
   cursor: pointer;
 }
 
