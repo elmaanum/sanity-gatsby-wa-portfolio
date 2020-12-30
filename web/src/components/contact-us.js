@@ -10,16 +10,6 @@ const encode = (data) => {
     .join('&');
 };
 
-let mainText = `
-We’ve provided planning services to over 43 companies over the last 9 years and are excited to see what we can do for you!
-
-Please fill out the form to the right and we’ll get back to you, or you can contact us via email or phone below.
-
-(612) 747-0771
-
-info@whittenassociates.com
-`;
-
 class ContactUs extends React.Component {
   state = {
     showModal: false,
@@ -47,12 +37,12 @@ class ContactUs extends React.Component {
     event.persist();
     const oldState = this.state;
     this.setState((oldState) => ({
+      ...oldState,
       formData: {
         ...oldState.formData,
         [event.target.name]: event.target.value,
       },
     }));
-    console.log(this.state);
   };
 
   onFormSubmit = (event) => {
@@ -61,20 +51,25 @@ class ContactUs extends React.Component {
   };
 
   onClickContactUsButton = () => {
-    this.setState({
+    const oldState = this.state;
+    this.setState((oldState) => ({
+      ...oldState,
       showModal: true,
-    });
+    }));
   };
 
   onClickClose = () => {
-    this.setState({
+    const oldState = this.state;
+    this.setState((oldState) => ({
+      ...oldState,
       showModal: false,
-    });
+    }));
   };
 
   render() {
     return (
       <div>
+        {console.log(this.state)}
         <div onClick={this.onClickContactUsButton}>{this.props.children}</div>
         {this.state.showModal && (
           <Modal
@@ -89,7 +84,24 @@ class ContactUs extends React.Component {
             <div className={styles.mainContainer}>
               <div className={styles.leftFrame}>
                 <div className={`${styles.leftText} textH2`}>Let's Talk!</div>
-                <div className={`${styles.leftText} textBody`}>{mainText}</div>
+                <div className={`${styles.leftText} textBody`}>
+                  We’ve provided planning services to over 43 companies over the last 9 years and
+                  are excited to see what we can do for you!
+                </div>
+                <div className={`${styles.leftText} textBody`}>
+                  Please fill out the form to the right and we’ll get back to you, or you can
+                  contact us via email or phone below.
+                </div>
+                <div className={`${styles.leftText} textBody`}>
+                  <a className={styles.underline} href="tel:(612) 747-0771">
+                    (612) 747-0771
+                  </a>
+                </div>
+                <div className={`${styles.leftText} textBody`}>
+                  <a className={styles.underline} href="mailto:info@whittenassociates.com">
+                    info@whittenassociates.com
+                  </a>
+                </div>
               </div>
               <div className={styles.rightFrame}>
                 <div className={styles.formContainer}>
@@ -97,11 +109,11 @@ class ContactUs extends React.Component {
                     <div className={styles.formSet}>
                       <label className="textBody">Name</label>
                       <input
+                        onChange={this.onInputChange}
                         className={styles.inputShort}
                         type="text"
                         name="name"
                         value={this.state.formData.name}
-                        onChange={this.onInputChange}
                       />
                     </div>
                     <div className={styles.formSet}>
