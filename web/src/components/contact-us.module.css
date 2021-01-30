@@ -73,3 +73,7 @@
 .underline {
   text-decoration: underline;
 }
+
+.swaltest {
+  height: 320px !important;
+}
