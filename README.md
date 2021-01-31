@@ -1,6 +1,6 @@
 # Whitten Associates Website
 
-Main website for Whitten Associates.
+Main website for Whitten Associates. [TEST UPDATE]
 
 ## Frameworks / Stack
 
