@@ -18,14 +18,14 @@ import '../styles/custom-properties.css';
 const accoladesText = ["they're just great", '40 projects', '50 combined years of experience'];
 const logoImages = [logo1, logo2, logo3];
 
-const createAccoladeCard = (text) => (
-  <div className={styles.accoladeBox}>
+const createAccoladeCard = (text, key) => (
+  <div className={styles.accoladeBox} key={key}>
     <div className={`${styles.accoladeText} textH3`}>{text}</div>
   </div>
 );
 
-const createLogoCard = (logoUrl, altText) => (
-  <div className={styles.logoBox}>
+const createLogoCard = (logoUrl, key, altText) => (
+  <div className={styles.logoBox} key={key}>
     <img className={styles.logo} src={logoUrl} alt={altText} />
   </div>
 );
@@ -102,13 +102,13 @@ const IndexPage = (props) => {
           </div>
         </div>
         <div className={styles.accoladeList}>
-          {accoladesText.map((accolade) => createAccoladeCard(accolade))}
+          {accoladesText.map((accolade, index) => createAccoladeCard(accolade, index))}
         </div>
         <div className={styles.serviceCardList}>
           {serviceNodes && <ServicePreviewGrid nodes={serviceNodes}></ServicePreviewGrid>}
         </div>
         <div className={styles.logoList}>
-          {logoImages.map((logo) => createLogoCard(logo, 'client logo'))}
+          {logoImages.map((logo, index) => createLogoCard(logo, index, 'client logo'))}
         </div>
       </Container>
     </Layout>
