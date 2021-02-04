@@ -23,8 +23,5 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.0",
     "lerna": "^3.22.1"
-  },
-  "dependencies": {
-    "react-dropdown": "^1.9.0"
   }
 }

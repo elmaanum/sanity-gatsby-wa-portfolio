@@ -1,12 +1,10 @@
 import React from 'react';
-import { graphql } from 'gatsby';
 import GraphQLErrorList from '../components/graphql-error-list';
 // import SEO from '../components/seo';
 import Layout from '../containers/layout';
 import Container from '../components/container';
 import ServicePreviewGrid from '../components/service-preview-grid';
 import { mapEdgesToNodes } from '../lib/helpers';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import heroImage from '../assets/indexHeroImage.jpg';
 import logo1 from '../assets/logo1.png';
