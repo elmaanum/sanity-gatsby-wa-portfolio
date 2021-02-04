@@ -1,34 +1,26 @@
 import React, { useState } from 'react';
-import { buildImageObj } from '../lib/helpers';
-import { imageUrlFor } from '../lib/image-url';
 import styles from './project-viewer.module.css';
 import iconClose from '../assets/close-button.svg';
 import iconArrow from '../assets/arrow.svg';
 import iconCircle from '../assets/circle.svg';
 import iconCircleFilled from '../assets/circle-filled.svg';
 import BlockContent from '../components/block-content';
+import Img from 'gatsby-image';
 
 const ProjectViewer = ({ project, closeViewer }) => {
   const [imageIndex, setImageIndex] = useState(0);
-
   return (
     <div className={styles.projectContentRoot}>
-      <img
-        className={styles.projectImageBackground}
-        src={imageUrlFor(buildImageObj(project.images[imageIndex]))
-          .width(1000)
-          .height(500)
-          .fit('crop')
-          .crop('focalpoint')
-          .url()}
-      />
+      <Img fluid={project.images[imageIndex].asset.fluid} />
       <div className={styles.projectInfoBox}>
         <div className={`textH2`}>{project.title}</div>
-        <BlockContent blocks={project.description} />
+        <BlockContent blocks={project._rawDescription} />
       </div>
-      <button>
-        <img className={styles.iconClose} onClick={closeViewer} src={iconClose} alt={'close'} />
-      </button>
+      {closeViewer && (
+        <button>
+          <img className={styles.iconClose} onClick={closeViewer} src={iconClose} alt={'close'} />
+        </button>
+      )}
       <button>
         <img
           className={styles.iconArrowRight}

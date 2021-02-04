@@ -36,6 +36,10 @@ export const query = graphql`
             asset {
               id
               _id
+              url
+              fluid(maxWidth: 1300, maxHeight: 650) {
+                ...GatsbySanityImageFluid
+              }
             }
             hotspot {
               x
