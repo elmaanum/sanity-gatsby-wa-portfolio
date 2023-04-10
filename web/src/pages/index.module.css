@@ -95,12 +95,12 @@
   filter: grayscale(100%);
 }
 
-/*
 img {
   
   display: block;
   
 }
+
 #hero {
   width: 600px;
   height: 600px;
@@ -117,4 +117,4 @@ img {
     left: 0;
     background-color: #000000;
     opacity: 0.6;
-} */
+}

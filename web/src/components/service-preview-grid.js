@@ -1,7 +1,7 @@
 import React from 'react';
 import ServicePreview from './service-preview';
 
-import styles from './service-preview-grid.module.css';
+import * as styles from './service-preview-grid.module.css';
 
 const prioritizer = (prioritizedNodes, node) => {
   prioritizedNodes.splice(node.mainImage.priority - 1, 0, node);
@@ -11,7 +11,7 @@ const prioritizeServices = (nodes) => nodes.reduce(prioritizer, []);
 
 function ServicePreviewGrid(props) {
   return (
-    <div className={styles.root}>
+    <div className={styles}>
       <ul className={styles.grid}>
         {props.nodes &&
           prioritizeServices(props.nodes).map((node) => (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './contact-us.module.css';
+import * as styles from './contact-us.module.css';
 import Swal from 'sweetalert2';
 
 const isEmail = (email) =>

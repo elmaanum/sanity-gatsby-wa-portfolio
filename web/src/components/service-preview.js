@@ -2,7 +2,7 @@ import { Link } from 'gatsby';
 import React from 'react';
 import { buildImageObj } from '../lib/helpers';
 import { imageUrlFor } from '../lib/image-url';
-import styles from './service-preview.module.css';
+import * as styles from './service-preview.module.css';
 
 // TODO: Darken background behind white text on Service Cards so the text is visible
 

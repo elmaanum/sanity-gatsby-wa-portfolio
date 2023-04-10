@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './personInfo.module.css';
+import * as styles from './personInfo.module.css';
 import BlockContent from './block-content';
 
 // TODO: Add some formatting to pass with Block Content (see docs for package)
@@ -7,7 +7,7 @@ import BlockContent from './block-content';
 const PersonInfo = ({ personData }) => (
   <div className={styles.bioContainer}>
     <div className={styles.personText}>
-      <div className={styles.intro}>
+      <div className={styles}>
         <div className={styles.name}>{personData.name}</div>
         <div className={styles.credentials}>{personData.credentials}</div>
       </div>
