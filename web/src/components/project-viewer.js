@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { buildImageObj } from '../lib/helpers';
 import { imageUrlFor } from '../lib/image-url';
-import styles from './project-viewer.module.css';
+import * as styles from './project-viewer.module.css';
 import iconClose from '../assets/close-button.svg';
 import iconArrow from '../assets/arrow.svg';
 import iconCircle from '../assets/circle.svg';

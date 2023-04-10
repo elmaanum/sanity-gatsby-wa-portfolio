@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './contact-us.module.css';
+import * as styles from './contact-us.module.css';
 import iconClose from '../assets/close-button-grey.svg';
 import Modal from '../components/modal.js';
 import ContactUsForm from './contact-us-form.js';

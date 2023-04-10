@@ -3,7 +3,8 @@ import GraphQLErrorList from '../components/graphql-error-list';
 import Layout from '../containers/layout';
 import Container from '../components/container';
 import PersonInfo from '../components/personInfo';
-import styles from './about-us.module.css';
+import * as styles from './about-us.module.css';
+import { graphql } from 'gatsby';
 
 const AboutUsPage = (props) => {
   const { errors, data } = props;

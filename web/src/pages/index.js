@@ -5,12 +5,13 @@ import Layout from '../containers/layout';
 import Container from '../components/container';
 import ServicePreviewGrid from '../components/service-preview-grid';
 import { mapEdgesToNodes } from '../lib/helpers';
+import { graphql } from 'gatsby';
 
 import heroImage from '../assets/indexHeroImage.jpg';
 import logo1 from '../assets/logo1.png';
 import logo2 from '../assets/logo2.png';
 import logo3 from '../assets/logo3.png';
-import styles from './index.module.css';
+import * as styles from './index.module.css'
 import '../styles/custom-properties.css';
 
 const accoladesText = ["they're just great", '40 projects', '50 combined years of experience'];
@@ -76,8 +77,8 @@ export const query = graphql`
 const IndexPage = (props) => {
   const { data, errors } = props;
   if (errors) {
-    return (
-      <Layout>
+  return (
+    <Layout>
         <GraphQLErrorList errors={errors} />
       </Layout>
     );

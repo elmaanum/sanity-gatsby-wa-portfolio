@@ -1,11 +1,12 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import Layout from '../containers/layout';
-import styles from './portfolio.module.css';
+import * as styles from './portfolio.module.css';
 import Modal from '../components/modal.js';
 import { buildImageObj } from '../lib/helpers';
 import { imageUrlFor } from '../lib/image-url';
 import ProjectViewer from '../components/project-viewer';
+import { graphql } from 'gatsby';
 
 import 'react-dropdown/style.css';
 import '../styles/layout.css';

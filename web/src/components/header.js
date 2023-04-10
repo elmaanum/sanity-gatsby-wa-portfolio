@@ -1,6 +1,6 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import styles from './header.module.css';
+import * as styles from './header.module.css';
 
 // Weird issue with clashing styles if you call "styles.xxx" from activeStyle on Link
 // So I'm creating the style directly in the code
