@@ -35,11 +35,10 @@ const Footer = () => (
               <a href={`mailto:${email}`}>{email}</a>
             </span>
           </div>
-          {/* TODO: Link to "Contact Us" modal when complete */}
           <div className={styles.footerElement}>
-            <ContactUs>
-              <div className={`${styles.contactUsButton} button primary`}>Contact Us</div>
-            </ContactUs>
+            <div className={`${styles.contactUsButton} button primary`}>
+              <ContactUs>Contact Us</ContactUs>
+            </div>
           </div>
         </div>
       </footer>
