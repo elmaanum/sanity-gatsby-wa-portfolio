@@ -1,0 +1,14 @@
+@import '../styles/custom-properties.css';
+@import '../styles/custom-media.css';
+
+.responsiveButton {
+  @media (--media-min-small) {
+    margin: -3em 0 0 15em;
+  }
+  @media (--media-min-medium) {
+    margin: -3em 0 0 20em;
+  }
+  @media (--media-min-large) {
+    margin: -5em 0px 0px 18em;
+  }
+}
