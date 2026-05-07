@@ -1,89 +1,137 @@
-from fastapi import FastAPI, APIRouter
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import asyncio
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
 
+import requests
+import resend
+from dotenv import load_dotenv
+from fastapi import FastAPI, APIRouter, HTTPException
+from pydantic import BaseModel, EmailStr, Field
+from starlette.middleware.cors import CORSMiddleware
 
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+load_dotenv(ROOT_DIR / ".env")
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# Resend
+resend.api_key = os.environ.get("RESEND_API_KEY", "")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL", "info@whittenassociates.com")
 
-# Create the main app without a prefix
-app = FastAPI()
+# Sanity
+SANITY_PROJECT_ID = os.environ.get("SANITY_PROJECT_ID", "6raq5w4t")
+SANITY_DATASET = os.environ.get("SANITY_DATASET", "production")
+SANITY_API_VERSION = os.environ.get("SANITY_API_VERSION", "2024-01-01")
+SANITY_READ_TOKEN = os.environ.get("SANITY_READ_TOKEN", "")
 
-# Create a router with the /api prefix
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="Whitten Associates API")
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+class ContactMessage(BaseModel):
+    name: str = Field(..., min_length=1, max_length=200)
+    email: EmailStr
+    company: str | None = Field(default="", max_length=200)
+    message: str = Field(..., min_length=1, max_length=5000)
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Whitten Associates API"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/health")
+async def health():
+    return {"status": "ok", "resend_configured": bool(resend.api_key)}
 
-# Include the router in the main app
+
+class SanityQuery(BaseModel):
+    query: str
+    params: dict | None = None
+
+
+@api_router.post("/sanity")
+async def sanity_query(body: SanityQuery):
+    """Server-side proxy for Sanity GROQ queries (avoids browser CORS)."""
+    import json as _json
+    url = f"https://{SANITY_PROJECT_ID}.api.sanity.io/v{SANITY_API_VERSION}/data/query/{SANITY_DATASET}"
+    payload = {"query": body.query}
+    if body.params:
+        # Sanity expects each param JSON-encoded (e.g. $slug must be "architecture" with quotes)
+        for k, v in body.params.items():
+            payload[f"${k}"] = _json.dumps(v)
+    headers = {}
+    if SANITY_READ_TOKEN:
+        headers["Authorization"] = f"Bearer {SANITY_READ_TOKEN}"
+    try:
+        r = await asyncio.to_thread(requests.get, url, params=payload, headers=headers, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        return {"result": data.get("result", None)}
+    except Exception as e:
+        logger.exception("Sanity query failed")
+        raise HTTPException(status_code=502, detail=f"Sanity query failed: {e}")
+
+
+def _build_html(body: ContactMessage) -> str:
+    safe_msg = body.message.replace("\n", "<br/>")
+    return f"""
+    <table width="100%" cellpadding="0" cellspacing="0" style="font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color:#202123; max-width:640px;">
+      <tr><td style="padding:16px 0; border-bottom:2px solid #31c17c;">
+        <h2 style="margin:0; font-size:20px; color:#3a506b;">New contact form submission</h2>
+      </td></tr>
+      <tr><td style="padding:16px 0;">
+        <p style="margin:0 0 8px;"><strong>Name:</strong> {body.name}</p>
+        <p style="margin:0 0 8px;"><strong>Email:</strong> <a href="mailto:{body.email}" style="color:#3a506b;">{body.email}</a></p>
+        <p style="margin:0 0 8px;"><strong>Company:</strong> {body.company or '-'}</p>
+        <p style="margin:16px 0 8px;"><strong>Message:</strong></p>
+        <div style="padding:12px 16px; background:#f6f7f9; border-left:3px solid #31c17c;">{safe_msg}</div>
+      </td></tr>
+      <tr><td style="padding:16px 0; color:#7a7a7a; font-size:12px;">
+        Sent from whittenassociates.com contact form
+      </td></tr>
+    </table>
+    """
+
+
+@api_router.post("/contact")
+async def submit_contact(body: ContactMessage):
+    if not resend.api_key:
+        # Soft-success in dev so the form UX works before keys are set.
+        logger.warning("RESEND_API_KEY not set — logging form submission only.")
+        logger.info(
+            "Contact: name=%s email=%s company=%s message=%s",
+            body.name, body.email, body.company, body.message,
+        )
+        return {"status": "queued", "delivered": False}
+
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [RECIPIENT_EMAIL],
+        "reply_to": body.email,
+        "subject": f"New website inquiry from {body.name}",
+        "html": _build_html(body),
+    }
+    try:
+        result = await asyncio.to_thread(resend.Emails.send, params)
+        return {"status": "sent", "delivered": True, "id": result.get("id")}
+    except Exception as e:
+        logger.exception("Failed to send contact email")
+        raise HTTPException(status_code=500, detail=f"Email send failed: {e}")
+
+
 app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
