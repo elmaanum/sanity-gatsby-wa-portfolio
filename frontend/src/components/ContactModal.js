@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
+import { getBackendBaseUrl } from '../lib/apiBase'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-const API = process.env.REACT_APP_BACKEND_URL
 
 const ContactModal = ({ children }) => {
   const [open, setOpen] = useState(false)
@@ -32,7 +32,15 @@ const ContactModal = ({ children }) => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const res = await fetch(`${API}/api/contact`, {
+      const base = getBackendBaseUrl()
+      if (!base) {
+        toast.error(
+          'This form is not configured for this environment. Please email us directly.',
+        )
+        setSubmitting(false)
+        return
+      }
+      const res = await fetch(`${base}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
