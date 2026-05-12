@@ -2,7 +2,9 @@ import imageUrlBuilder from '@sanity/image-url'
 
 const PROJECT_ID = process.env.REACT_APP_SANITY_PROJECT_ID || '6raq5w4t'
 const DATASET = process.env.REACT_APP_SANITY_DATASET || 'production'
-const API = process.env.REACT_APP_BACKEND_URL
+// When BACKEND_URL is empty, use relative paths — works on Vercel (same origin)
+// and in Emergent preview (ingress routes /api/* to FastAPI on :8001).
+const API = process.env.REACT_APP_BACKEND_URL || ''
 
 // Server-side proxy fetch — avoids CORS issues from legacy Sanity CORS settings
 export const sanity = {

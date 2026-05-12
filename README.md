@@ -297,62 +297,101 @@ You **must** configure the host to rewrite all paths to `index.html` (for client
 
 ## Deploying to Vercel
 
-Vercel can't host the FastAPI backend without conversion. Two paths:
+This repo is pre-configured for **single-deploy on Vercel** — the React frontend and the API endpoints (contact form + Sanity proxy) all ship as one Vercel project.
 
-### Path A — Convert backend endpoints to Vercel Functions (recommended)
-
-Move `/api/contact` and `/api/sanity` into `frontend/api/` as serverless Python functions, then deploy only the `frontend/` folder to Vercel. Everything is one project, one deploy, one URL.
-
-Roughly:
+### What's in place
 
 ```
 frontend/
-├── api/
-│   ├── contact.py    # def handler(request): ... uses resend
-│   └── sanity.py     # def handler(request): ... proxies GROQ
-├── src/
-└── vercel.json
+├── api/                # Vercel Python serverless functions
+│   ├── contact.py      # POST /api/contact  → Resend email
+│   ├── sanity.py       # POST /api/sanity   → GROQ proxy
+│   └── health.py       # GET  /api/health
+├── requirements.txt    # Python deps for the functions (resend)
+├── vercel.json         # build + SPA rewrite config
+└── src/                # React app
 ```
 
-`vercel.json` (root build settings):
-```json
-{
-  "buildCommand": "yarn build",
-  "outputDirectory": "build",
-  "framework": "create-react-app",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}
+The frontend uses **relative URLs** (`/api/contact`, `/api/sanity`) so the same code works locally, in Emergent preview, and on Vercel without env-var changes.
+
+### One-time setup
+
+1. Go to [vercel.com](https://vercel.com) → **Sign up** with GitHub.
+2. **Add New… → Project** → import the `sanity-gatsby-wa-portfolio` repo → pick your rebuild branch.
+3. **Root Directory:** `frontend` ← *important — Vercel must know to deploy the `frontend/` subfolder, not the repo root*
+4. **Framework Preset:** Create React App (auto-detected)
+5. **Build Command:** `yarn build` (auto)
+6. **Output Directory:** `build` (auto)
+7. **Environment Variables** — add these (Settings → Environment Variables):
+
+   | Name | Value | Scope |
+   |---|---|---|
+   | `RESEND_API_KEY` | `re_...` (your real key) | Production, Preview |
+   | `SENDER_EMAIL` | `onboarding@resend.dev` (or your verified domain) | All |
+   | `RECIPIENT_EMAIL` | `info@whittenassociates.com` | All |
+   | `SANITY_PROJECT_ID` | `6raq5w4t` | All |
+   | `SANITY_DATASET` | `production` | All |
+   | `SANITY_API_VERSION` | `2024-01-01` | All |
+   | `REACT_APP_SANITY_PROJECT_ID` | `6raq5w4t` | All |
+   | `REACT_APP_SANITY_DATASET` | `production` | All |
+
+   *Leave `REACT_APP_BACKEND_URL` unset — empty means "use relative URLs," which is what Vercel needs.*
+
+8. Click **Deploy**. First build takes ~2 min.
+
+### Verify the deploy
+
+After it's live (e.g. `https://your-project.vercel.app`):
+
+```bash
+# Health check (should show resend_configured: true if env vars are set)
+curl https://your-project.vercel.app/api/health
+
+# Sanity proxy test
+curl -X POST https://your-project.vercel.app/api/sanity \
+  -H "Content-Type: application/json" \
+  -d '{"query":"*[_type==\"service\"]{title}"}'
+
+# Submit a contact form test (real email will be sent if RESEND_API_KEY is set)
+curl -X POST https://your-project.vercel.app/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"info@whittenassociates.com","company":"WA","message":"Vercel test"}'
 ```
 
-Pros: one deploy, no separate backend, free tier sufficient.
-Cons: ~30 min refactor of `backend/server.py` into per-route files.
+### Custom domain
 
-### Path B — Frontend on Vercel + backend on Railway
+Once deploy is verified, attach `whittenassociates.com`:
 
-Leave the FastAPI backend as-is, deploy it to Railway, then point Vercel at it:
+1. Vercel → Project → **Settings** → **Domains** → Add → type `whittenassociates.com`
+2. Vercel will show you DNS records to add. Two options at your DNS provider:
+   - **Apex domain (`whittenassociates.com`):** add an A record pointing to `76.76.21.21`
+   - **WWW (`www.whittenassociates.com`):** add a CNAME pointing to `cname.vercel-dns.com`
+   - Add both — Vercel auto-redirects one to the other
+3. SSL is automatic and free. ~10 min for DNS to propagate.
 
-1. Deploy `backend/` to Railway → note the URL, e.g. `https://wa-backend.up.railway.app`.
-2. In Vercel, set project root to `frontend/`.
-3. In Vercel → Settings → Environment Variables:
-   - `REACT_APP_BACKEND_URL=https://wa-backend.up.railway.app`
-   - `REACT_APP_SANITY_PROJECT_ID=6raq5w4t`
-   - `REACT_APP_SANITY_DATASET=production`
-4. Deploy.
+### After the domain is live
 
-Pros: zero code refactor.
-Cons: two services to monitor and pay for (eventually).
+Add it to Sanity's CORS allowlist so future direct browser calls don't get blocked (and so we could remove the proxy if desired):
 
-### One-time Vercel setup (either path)
+- [sanity.io/manage](https://www.sanity.io/manage) → project `6raq5w4t` → **API** → **CORS origins** → Add:
+  - `https://whittenassociates.com`
+  - `https://www.whittenassociates.com`
+  - `https://*.vercel.app` (covers Vercel preview deploys)
 
-1. Sign up at [vercel.com](https://vercel.com) with GitHub.
-2. Import the repo.
-3. Set the **Root Directory** to `frontend/` (or `/` for Path A if you've moved API there).
-4. Add env vars (above).
-5. **Connect a custom domain** when ready: Vercel → Project → Domains → add `whittenassociates.com`. Vercel will give you DNS records to add at your registrar. Auto-SSL is free.
+### Deploys going forward
 
-Vercel deploys on every push to the main branch by default. Preview deploys for every PR.
+Every `git push` to the main branch auto-deploys to production.
+Every PR gets its own **preview URL** for review. This is one of the best Vercel features — never break production with an untested change.
+
+### About the FastAPI backend
+
+The original FastAPI in `backend/` is **no longer required for Vercel deploy** — the Vercel Functions in `frontend/api/` are functionally identical. The FastAPI backend stays in the repo for:
+
+- Local development (some prefer `uvicorn` over `vercel dev`)
+- Emergent preview environment (which uses FastAPI for `/api/*`)
+- Anyone wanting to deploy backend separately to Railway/Render (Path B)
+
+You can safely ignore or even delete the `backend/` folder once you're committed to Vercel.
 
 ---
 

@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { toast } from 'sonner'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-const API = process.env.REACT_APP_BACKEND_URL
+const API = process.env.REACT_APP_BACKEND_URL || ''
 
 const ContactModal = ({ children }) => {
   const [open, setOpen] = useState(false)
