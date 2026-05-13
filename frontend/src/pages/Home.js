@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 import { sanity, urlFor } from '../lib/sanity'
 import ContactModal from '../components/ContactModal'
+import ProjectViewer from '../components/ProjectViewer'
 
 const FALLBACK_HERO = 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=2000&q=80'
 const DEFAULT_HEADLINE = 'Planning and architecture services to create innovative and successful communities'
@@ -9,13 +11,22 @@ const DEFAULT_ACCOLADES = ['Trusted partners', '40+ projects delivered', '50+ ye
 
 const Home = ({ services = [], settings }) => {
   const [siteServices, setSiteServices] = useState(services)
+  const [featured, setFeatured] = useState([])
+  const [active, setActive] = useState(null)
+
   useEffect(() => {
-    if (services.length === 0) {
-      sanity.fetch(`*[_type=="service"] | order(title asc){ _id, title, slug, mainImage }`).then(setSiteServices).catch(() => {})
-    } else {
-      // Re-fetch with mainImage for service cards
-      sanity.fetch(`*[_type=="service"] | order(title asc){ _id, title, slug, mainImage }`).then(setSiteServices).catch(() => setSiteServices(services))
-    }
+    sanity
+      .fetch(`*[_type=="service"] | order(title asc){ _id, title, slug, mainImage }`)
+      .then(setSiteServices)
+      .catch(() => setSiteServices(services))
+
+    sanity
+      .fetch(`*[_type=="project" && featured==true] | order(coalesce(featuredOrder, 999) asc, title asc){
+        _id, title, slug, client, description, images,
+        "serviceTitles": serviceTypes[]->title
+      }`)
+      .then((res) => setFeatured(res || []))
+      .catch(() => setFeatured([]))
   }, [services])
 
   const heroSrc = settings?.heroImage ? urlFor(settings.heroImage).width(2000).fit('max').url() : FALLBACK_HERO
@@ -56,6 +67,57 @@ const Home = ({ services = [], settings }) => {
         </div>
       </section>
 
+      {/* Featured projects */}
+      {featured.length > 0 && (
+        <section className="max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-4" data-testid="featured-section">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <div className="textMicro uppercase tracking-[0.25em] text-[var(--color-accent)] mb-3">Featured work</div>
+              <h2 className="textH1 text-[var(--color-shadow)]">Recent projects</h2>
+            </div>
+            <Link to="/portfolio" className="hidden md:inline textSmall uppercase tracking-wider text-[var(--color-primary)] hover:text-[var(--color-accent)]" data-testid="featured-view-all">All work →</Link>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3" data-testid="featured-grid">
+            {featured.slice(0, 6).map((p, i) => {
+              const cover = (p.images || []).slice().sort((a, b) => (a?.priority ?? 999) - (b?.priority ?? 999))[0]
+              // First card spans 2 cols on lg+ if there are 3+ items, for editorial layout
+              const wide = i === 0 && featured.length >= 3
+              return (
+                <button
+                  key={p._id}
+                  onClick={() => setActive(p)}
+                  className={`group relative text-left overflow-hidden rounded-lg bg-[var(--color-shadow)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] ${wide ? 'lg:col-span-2 lg:row-span-2' : ''}`}
+                  data-testid={`featured-tile-${p.slug?.current}`}
+                >
+                  <div className={`overflow-hidden ${wide ? 'aspect-[16/11]' : 'aspect-[7/6]'}`}>
+                    {cover ? (
+                      <img
+                        src={urlFor(cover).width(wide ? 1400 : 800).height(wide ? 950 : 700).fit('crop').url()}
+                        alt={cover?.alt || p.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-shadow)]" />
+                    )}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end justify-between gap-4">
+                    <div>
+                      <div className={`${wide ? 'textH1' : 'textH2'} text-white`}>{p.title}</div>
+                      <div className="mt-1 textSmall uppercase tracking-wider text-[var(--color-accent)]">
+                        {(p.serviceTitles || [])[0] || (p.client || 'View project')}
+                      </div>
+                    </div>
+                    <ArrowUpRight className="text-white opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" size={wide ? 32 : 24} />
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
       {/* Services */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
         <div className="flex items-end justify-between mb-10">
@@ -93,6 +155,8 @@ const Home = ({ services = [], settings }) => {
           </div>
         </section>
       )}
+
+      {active && <ProjectViewer project={active} onClose={() => setActive(null)} />}
     </div>
   )
 }

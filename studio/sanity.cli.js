@@ -5,4 +5,5 @@ export default defineCliConfig({
     projectId: '6raq5w4t',
     dataset: 'production',
   },
+  studioHost: 'maanum-architecture',
 })

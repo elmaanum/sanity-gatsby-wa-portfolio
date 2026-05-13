@@ -11,6 +11,20 @@ export default {
       options: { source: 'title', maxLength: 96 },
     },
     {
+      name: 'featured',
+      title: 'Featured on home page',
+      type: 'boolean',
+      description: 'Show this project in the featured carousel on the home page. Aim for 2–4 featured projects.',
+      initialValue: false,
+    },
+    {
+      name: 'featuredOrder',
+      title: 'Featured order',
+      type: 'number',
+      description: 'Display order in the featured section (lower numbers first). Only matters when "Featured" is on.',
+      hidden: ({ parent }) => !parent?.featured,
+    },
+    {
       name: 'images',
       title: 'Images',
       type: 'array',
@@ -32,6 +46,23 @@ export default {
     { name: 'client', title: 'Client', type: 'string' },
   ],
   preview: {
-    select: { title: 'title', media: 'images.0' },
+    select: { title: 'title', featured: 'featured', media: 'images.0' },
+    prepare({ title, featured, media }) {
+      return {
+        title: featured ? `★ ${title}` : title,
+        media,
+      }
+    },
   },
+  orderings: [
+    {
+      title: 'Featured first',
+      name: 'featuredFirst',
+      by: [
+        { field: 'featured', direction: 'desc' },
+        { field: 'featuredOrder', direction: 'asc' },
+        { field: 'title', direction: 'asc' },
+      ],
+    },
+  ],
 }
