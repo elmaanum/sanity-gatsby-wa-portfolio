@@ -1,15 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
+import { sanity } from '../lib/sanity'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
 const API = process.env.REACT_APP_BACKEND_URL || ''
 
-const ContactModal = ({ children }) => {
+const ContactModal = ({ children, settings: settingsProp }) => {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', company: '', message: '' })
   const [errors, setErrors] = useState({})
+  const [settings, setSettings] = useState(settingsProp || null)
+
+  useEffect(() => {
+    if (settings) return
+    sanity
+      .fetch(`*[_id=="siteSettings"][0]{ phonenumber, email }`)
+      .then(setSettings)
+      .catch(() => {})
+  }, [settings])
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -41,12 +51,16 @@ const ContactModal = ({ children }) => {
       toast.success("Thank you! We'll be in touch soon.")
       setForm({ name: '', email: '', company: '', message: '' })
       close()
-    } catch (err) {
+    } catch {
       toast.error('Something went wrong. Please try again or email us directly.')
     } finally {
       setSubmitting(false)
     }
   }
+
+  // Contact info comes from Sanity siteSettings — no hardcoded fallbacks.
+  const phone = settings?.phonenumber
+  const email = settings?.email
 
   return (
     <>
@@ -60,17 +74,21 @@ const ContactModal = ({ children }) => {
             <div className="bg-[var(--color-primary)] text-white p-8 flex flex-col justify-center gap-4">
               <div className="textH2">Let's Talk!</div>
               <p className="textBody opacity-90">
-                We've provided planning services to over 43 companies over the last 9 years and are excited to see what we can do for you.
+                Maanum Architecture, Inc. partners with Whitten Associates to deliver thoughtful design and planning for innovative communities. We'd love to hear about your project.
               </p>
               <p className="textBody opacity-90">
                 Fill out the form, or reach us directly:
               </p>
-              <div className="textBody">
-                <a href="tel:(612) 747-0771" className="underline underline-offset-4 hover:text-[var(--color-accent)]">(612) 747-0771</a>
-              </div>
-              <div className="textBody">
-                <a href="mailto:info@whittenassociates.com" className="underline underline-offset-4 hover:text-[var(--color-accent)]">info@whittenassociates.com</a>
-              </div>
+              {phone && (
+                <div className="textBody">
+                  <a href={`tel:${phone.replace(/\s+/g, '')}`} className="underline underline-offset-4 hover:text-[var(--color-accent)]">{phone}</a>
+                </div>
+              )}
+              {email && (
+                <div className="textBody">
+                  <a href={`mailto:${email}`} className="underline underline-offset-4 hover:text-[var(--color-accent)]">{email}</a>
+                </div>
+              )}
             </div>
 
             <form onSubmit={onSubmit} className="p-8 flex flex-col gap-4" data-testid="contact-form">

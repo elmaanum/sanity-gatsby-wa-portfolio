@@ -11,9 +11,9 @@ const Header = ({ services = [] }) => {
   return (
     <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-[var(--color-gray-vlight)]" data-testid="site-header">
       <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-16 lg:h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-baseline gap-2 group" data-testid="logo-home-link">
-          <span className="textH3 font-bold tracking-tight text-[var(--color-primary)]">Whitten</span>
-          <span className="textSmall uppercase tracking-[0.18em] text-[var(--color-gray)] group-hover:text-[var(--color-accent)] transition-colors">Associates</span>
+        <Link to="/" className="flex items-baseline gap-2 group" data-testid="logo-home-link" aria-label="Maanum Architecture home">
+          <span className="textH3 font-bold tracking-tight text-[var(--color-primary)]">Maanum</span>
+          <span className="textSmall uppercase tracking-[0.18em] text-[var(--color-gray)] group-hover:text-[var(--color-accent)] transition-colors">Architecture</span>
         </Link>
 
         <ul className="hidden lg:flex items-center gap-8 textSmall uppercase tracking-wider">
