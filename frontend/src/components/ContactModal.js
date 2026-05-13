@@ -42,7 +42,15 @@ const ContactModal = ({ children, settings: settingsProp }) => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const res = await fetch(`${API}/api/contact`, {
+      const base = getBackendBaseUrl()
+      if (!base) {
+        toast.error(
+          'This form is not configured for this environment. Please email us directly.',
+        )
+        setSubmitting(false)
+        return
+      }
+      const res = await fetch(`${base}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
