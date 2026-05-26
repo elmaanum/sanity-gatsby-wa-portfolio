@@ -56,29 +56,29 @@ fi
 # --- 3. MACOS TERMINAL AUTOMATION ---
 echo "🚀 Launching development tabs..."
 
+##!/bin/bash
+
 ROOT_DIR=$(pwd)
 
 osascript <<EOF
 tell application "Terminal"
     activate
-    
-    # Tab 1: Backend
-    set window_1 to do script "cd '$ROOT_DIR/backend' && source .venv/bin/activate && pip install -r requirements.txt && uvicorn server:app --reload --port 8001"
-    set custom title of tab 1 of window_1 to "Backend"
-    
-    # Tab 2: Frontend
-    tell application "System Events" to keystroke "t" using command down
-    delay 0.3
-    set current_tab to selected tab of front window
-    do script "cd '$ROOT_DIR/frontend' && yarn install && yarn start" in current_tab
-    set custom title of current_tab to "Frontend"
-    
-    # Tab 3: Sanity Studio
-    tell application "System Events" to keystroke "t" using command down
-    delay 0.3
-    set current_tab to selected tab of front window
-    do script "cd '$ROOT_DIR/studio' && yarn install && yarn dev" in current_tab
-    set custom title of current_tab to "Sanity Studio"
+
+    -- Backend
+    do script "cd '$ROOT_DIR/backend' && source .venv/bin/activate && uvicorn server:app --reload --port 8001"
+    delay 0.5
+    set custom title of selected tab of front window to "Backend"
+
+    -- Frontend
+    do script "cd '$ROOT_DIR/frontend' && yarn start"
+    delay 0.5
+    set custom title of selected tab of front window to "Frontend"
+
+    -- Studio
+    do script "cd '$ROOT_DIR/studio' && yarn dev"
+    delay 0.5
+    set custom title of selected tab of front window to "Studio"
+
 end tell
 EOF
 

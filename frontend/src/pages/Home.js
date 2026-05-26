@@ -9,10 +9,11 @@ const FALLBACK_HERO = 'https://images.unsplash.com/photo-1487958449943-2429e8be8
 const DEFAULT_HEADLINE = 'Planning and architecture services to create innovative and successful communities'
 const DEFAULT_ACCOLADES = ['Trusted partners', '40+ projects delivered', '50+ years combined experience']
 
-const Home = ({ services = [], settings }) => {
+const Home = ({ services = [], settings:settingsProp }) => {
   const [siteServices, setSiteServices] = useState(services)
   const [featured, setFeatured] = useState([])
   const [active, setActive] = useState(null)
+  const [settings, setSettings] = useState(settingsProp || null)
 
   useEffect(() => {
     sanity
@@ -29,6 +30,14 @@ const Home = ({ services = [], settings }) => {
       .catch(() => setFeatured([]))
   }, [services])
 
+  useEffect(() => {
+    if (settings) return
+    sanity
+      .fetch(`*[_id=="siteSettings"][0]{ heroImage, heroHeadline, accolades, clientLogos }`)
+      .then(setSettings)
+      .catch(() => {})
+  }, [settings])
+
   const heroSrc = settings?.heroImage ? urlFor(settings.heroImage).width(2000).fit('max').url() : FALLBACK_HERO
   const headline = settings?.heroHeadline || DEFAULT_HEADLINE
   const accolades = (settings?.accolades && settings.accolades.length > 0) ? settings.accolades : DEFAULT_ACCOLADES
@@ -41,7 +50,7 @@ const Home = ({ services = [], settings }) => {
         <div className="grid lg:grid-cols-12 gap-0 lg:gap-10 items-stretch">
           <div className="lg:col-span-5 px-6 lg:pl-10 lg:pr-0 py-12 lg:py-24 flex items-center">
             <div className="fadeUp">
-              <div className="textMicro uppercase tracking-[0.25em] text-[var(--color-accent)] mb-5">Whitten Associates</div>
+              {/* <div className="textMicro uppercase tracking-[0.25em] text-[var(--color-accent)] mb-5">Whitten Associates</div> */}
               <h1 className="textH1 text-[var(--color-shadow)] max-w-xl">{headline}</h1>
               <div className="mt-8 flex gap-3">
                 <Link to="/portfolio" className="btn btn-primary" data-testid="hero-portfolio-cta">See our work</Link>

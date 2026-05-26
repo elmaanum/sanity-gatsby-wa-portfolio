@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
 import { sanity } from '../lib/sanity'
+import { getBackendBaseUrl } from '../lib/apiBase'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
 const API = process.env.REACT_APP_BACKEND_URL || ''
-
 const ContactModal = ({ children, settings: settingsProp }) => {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -36,13 +36,14 @@ const ContactModal = ({ children, settings: settingsProp }) => {
     setOpen(false)
     setErrors({})
   }
-
   const onSubmit = async (e) => {
     e.preventDefault()
     if (!validate()) return
     setSubmitting(true)
     try {
+      console.log("form1: ",form)
       const base = getBackendBaseUrl()
+      console.log("base: ",base)
       if (!base) {
         toast.error(
           'This form is not configured for this environment. Please email us directly.',
@@ -55,6 +56,8 @@ const ContactModal = ({ children, settings: settingsProp }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
+      console.log("res: ",res)
+      console.log("res.ok: ",res.ok)
       if (!res.ok) throw new Error('Request failed')
       toast.success("Thank you! We'll be in touch soon.")
       setForm({ name: '', email: '', company: '', message: '' })

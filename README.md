@@ -119,7 +119,7 @@ You need **three terminals** running in parallel (or skip the Studio terminal if
 ```bash
 # Terminal 1 — backend
 cd backend
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn server:app --reload --port 8001
 
