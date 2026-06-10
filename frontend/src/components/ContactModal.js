@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
 import { sanity } from '../lib/sanity'
+import { getBackendBaseUrl } from '../lib/apiBase'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-
 const ContactModal = ({ children, settings: settingsProp }) => {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -35,7 +35,6 @@ const ContactModal = ({ children, settings: settingsProp }) => {
     setOpen(false)
     setErrors({})
   }
-
   const onSubmit = async (e) => {
     e.preventDefault()
     if (!validate()) return
@@ -46,6 +45,8 @@ const ContactModal = ({ children, settings: settingsProp }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
+      console.log("res: ",res)
+      console.log("res.ok: ",res.ok)
       if (!res.ok) throw new Error('Request failed')
       toast.success("Thank you! We'll be in touch soon.")
       setForm({ name: '', email: '', company: '', message: '' })

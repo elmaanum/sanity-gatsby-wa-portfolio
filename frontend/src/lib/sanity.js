@@ -1,4 +1,5 @@
 import imageUrlBuilder from '@sanity/image-url'
+import { getBackendBaseUrl } from './apiBase'
 
 const PROJECT_ID = process.env.REACT_APP_SANITY_PROJECT_ID || '6raq5w4t'
 const DATASET = process.env.REACT_APP_SANITY_DATASET || 'production'
@@ -10,6 +11,7 @@ const DATASET = process.env.REACT_APP_SANITY_DATASET || 'production'
 export const sanity = {
   fetch: async (query, params = null) => {
     const res = await fetch('/api/sanity', {
+
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, params }),

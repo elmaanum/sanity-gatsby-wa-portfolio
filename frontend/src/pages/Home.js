@@ -9,10 +9,11 @@ const FALLBACK_HERO = 'https://images.unsplash.com/photo-1487958449943-2429e8be8
 const DEFAULT_HEADLINE = 'Planning and architecture services to create innovative and successful communities'
 const DEFAULT_ACCOLADES = ['Trusted partners', '40+ projects delivered', '50+ years combined experience']
 
-const Home = ({ services = [], settings }) => {
+const Home = ({ services = [], settings:settingsProp }) => {
   const [siteServices, setSiteServices] = useState(services)
   const [featured, setFeatured] = useState([])
   const [active, setActive] = useState(null)
+  const [settings, setSettings] = useState(settingsProp || null)
 
   useEffect(() => {
     sanity
@@ -28,6 +29,14 @@ const Home = ({ services = [], settings }) => {
       .then((res) => setFeatured(res || []))
       .catch(() => setFeatured([]))
   }, [services])
+
+  useEffect(() => {
+    if (settings) return
+    sanity
+      .fetch(`*[_id=="siteSettings"][0]{ heroImage, heroHeadline, accolades, clientLogos }`)
+      .then(setSettings)
+      .catch(() => {})
+  }, [settings])
 
   const heroSrc = settings?.heroImage ? urlFor(settings.heroImage).width(2000).fit('max').url() : FALLBACK_HERO
   const headline = settings?.heroHeadline || DEFAULT_HEADLINE

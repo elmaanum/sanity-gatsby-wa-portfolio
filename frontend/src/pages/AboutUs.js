@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { sanity, urlFor } from '../lib/sanity'
 import PortableText from '../components/PortableText'
 
-const FALLBACK_BLURB = `Our goal is to create exciting, innovative and successful communities and developments for our clients. Combining market research and analysis gives us the unique perspective to provide market-responsive solutions. Our background includes extensive developer experience that provides our clients with a practical and realistic balance to all of their projects.`
+const FALLBACK_BLURB = `Our goal is to create innovative, market-responsive communities and developments that deliver lasting value for our clients. By combining thoughtful design, strategic planning, and in-depth market analysis, we provide practical solutions grounded in real-world development experience. Our integrated background in architecture, planning, and development allows us to balance creativity with feasibility, ensuring every project is both visionary and achievable.`
 
-const AboutUs = ({ settings }) => {
+const AboutUs = ({ settings:settingsProp }) => {
   const [people, setPeople] = useState([])
+  const [settings, setSettings] = useState(settingsProp || null)
 
   useEffect(() => {
     sanity
@@ -13,6 +14,14 @@ const AboutUs = ({ settings }) => {
       .then(setPeople)
       .catch(() => setPeople([]))
   }, [])
+
+  useEffect(() => {
+    if (settings) return
+    sanity
+      .fetch(`*[_id=="siteSettings"][0]{ aboutBlurb }`)
+      .then(setSettings)
+      .catch(() => {})
+  }, [settings])
 
   const blurb = settings?.aboutBlurb
 
