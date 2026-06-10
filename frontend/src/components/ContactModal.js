@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { sanity } from '../lib/sanity'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-const API = process.env.REACT_APP_BACKEND_URL || ''
 
 const ContactModal = ({ children, settings: settingsProp }) => {
   const [open, setOpen] = useState(false)
@@ -42,7 +41,7 @@ const ContactModal = ({ children, settings: settingsProp }) => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const res = await fetch(`${API}/api/contact`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
