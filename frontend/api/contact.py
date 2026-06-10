@@ -10,7 +10,7 @@ import resend
 
 resend.api_key = os.environ.get("RESEND_API_KEY", "")
 SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
-RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL", "info@whittenassociates.com")
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL", "info@maanumarchitecture.com")
 
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
@@ -30,7 +30,7 @@ def _build_html(name: str, email: str, company: str, message: str) -> str:
         <div style="padding:12px 16px; background:#f6f7f9; border-left:3px solid #31c17c;">{safe_msg}</div>
       </td></tr>
       <tr><td style="padding:16px 0; color:#7a7a7a; font-size:12px;">
-        Sent from whittenassociates.com contact form
+        Sent from maanumarchitecture.com contact form
       </td></tr>
     </table>
     """
