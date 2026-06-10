@@ -50,7 +50,7 @@ const Home = ({ services = [], settings:settingsProp }) => {
         <div className="grid lg:grid-cols-12 gap-0 lg:gap-10 items-stretch">
           <div className="lg:col-span-5 px-6 lg:pl-10 lg:pr-0 py-12 lg:py-24 flex items-center">
             <div className="fadeUp">
-              {/* <div className="textMicro uppercase tracking-[0.25em] text-[var(--color-accent)] mb-5">Whitten Associates</div> */}
+              <div className="textMicro uppercase tracking-[0.25em] text-[var(--color-accent)] mb-5">Maanum Architecture</div>
               <h1 className="textH1 text-[var(--color-shadow)] max-w-xl">{headline}</h1>
               <div className="mt-8 flex gap-3">
                 <Link to="/portfolio" className="btn btn-primary" data-testid="hero-portfolio-cta">See our work</Link>

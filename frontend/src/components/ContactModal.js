@@ -5,7 +5,6 @@ import { sanity } from '../lib/sanity'
 import { getBackendBaseUrl } from '../lib/apiBase'
 
 const isEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
-const API = process.env.REACT_APP_BACKEND_URL || ''
 const ContactModal = ({ children, settings: settingsProp }) => {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -41,17 +40,7 @@ const ContactModal = ({ children, settings: settingsProp }) => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      console.log("form1: ",form)
-      const base = getBackendBaseUrl()
-      console.log("base: ",base)
-      if (!base) {
-        toast.error(
-          'This form is not configured for this environment. Please email us directly.',
-        )
-        setSubmitting(false)
-        return
-      }
-      const res = await fetch(`${base}/api/contact`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
